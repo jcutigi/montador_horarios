@@ -1,0 +1,88 @@
+{
+  "formato": "montador-horarios",
+  "versao": 1,
+  "exportadoEm": "2026-06-07T00:00:00.000Z",
+  "dados": {
+    "professores": [
+      "Bianchi",
+      "Carlão",
+      "Célia",
+      "Danilo",
+      "Eloize",
+      "Fábio",
+      "João",
+      "Jorge",
+      "Lucas",
+      "Luiz",
+      "Mateus",
+      "Pablo",
+      "Pedro",
+      "Ramos",
+      "Salina",
+      "Sérgio",
+      "Silvana",
+      "Tiago"
+    ],
+    "salas": [
+      "C102",
+      "C104",
+      "C105",
+      "C106",
+      "C107",
+      "C209",
+      "A205 (Hangar)",
+      "Sala de Aula"
+    ],
+    "cursos": [
+      {
+        "id": "BES",
+        "nome": "BES",
+        "duracao": 50,
+        "quantidade": 4,
+        "horarios": [
+          { "inicio": "08:00", "fim": "09:40" },
+          { "inicio": "09:50", "fim": "11:30" },
+          { "inicio": "19:00", "fim": "20:40" },
+          { "inicio": "20:50", "fim": "22:30" }
+        ]
+      },
+      {
+        "id": "ADS",
+        "nome": "ADS",
+        "duracao": 50,
+        "quantidade": 3,
+        "horarios": [
+          { "inicio": "19:00", "fim": "20:40" },
+          { "inicio": "20:50", "fim": "22:30" }
+        ]
+      },
+      {
+        "id": "TII",
+        "nome": "TII",
+        "duracao": 45,
+        "quantidade": 3,
+        "horarios": [
+          { "inicio": "07:05", "fim": "08:35" },
+          { "inicio": "08:50", "fim": "10:20" },
+          { "inicio": "10:35", "fim": "12:05" },
+          { "inicio": "13:30", "fim": "15:00" },
+          { "inicio": "15:20", "fim": "16:50" }
+
+        ]
+      },
+      {
+        "id": "CORINGA",
+        "nome": "Coringa",
+        "duracao": 50,
+        "quantidade": 1,
+        "horarios": [
+          { "inicio": "08:00", "fim": "09:40" },
+          { "inicio": "09:50", "fim": "11:30" },
+          { "inicio": "19:00", "fim": "20:40" },
+          { "inicio": "20:50", "fim": "22:30" }
+        ]
+      }
+    ],
+    "aulas": {}
+  }
+}

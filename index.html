@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Montador de Horários</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <h1>Montador de horários</h1>
+      <p>Montagem manual com verificação de conflitos. As alterações são salvas automaticamente neste navegador.</p>
+    </div>
+    <div class="acoes-topo">
+      <button id="exportarBtn" class="secundario">Exportar JSON</button>
+      <label class="botao secundario arquivo-label" for="importarArquivo">Importar JSON</label>
+      <input id="importarArquivo" type="file" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <nav class="abas" aria-label="Seções do sistema">
+    <button class="aba ativa" data-aba="horarios">Horários</button>
+    <button class="aba" data-aba="cadastros">Cadastros</button>
+    <button class="aba" data-aba="configuracao">Configuração dos horários</button>
+  </nav>
+
+  <main>
+    <section id="aba-horarios" class="painel">
+      <div class="cabecalho-secao">
+        <div>
+          <h2>Visão geral das turmas</h2>
+          <p>Selecione uma célula para preencher ou editar uma aula. As colisões são verificadas entre todas as turmas.</p>
+        </div>
+        <div class="legenda"><span class="ponto conflito"></span> Conflito de professor/sala <span class="ponto descanso"></span> Descanso insuficiente (aula até 22:30; próxima a partir de 09:30)</div>
+      </div>
+      <div id="resumoConflitos" class="resumo" aria-live="polite"></div>
+      <div id="gradeGeral" class="grade-geral"></div>
+    </section>
+
+    <section id="aba-cadastros" class="painel escondido">
+      <h2>Cadastros</h2>
+      <p class="intro">Cadastre professores e salas uma única vez. Eles estarão disponíveis para selecionar nas aulas.</p>
+      <div class="duas-colunas">
+        <div class="cartao">
+          <h3>Professores</h3>
+          <form id="formProfessor" class="form-linha">
+            <input id="nomeProfessor" type="text" placeholder="Nome do professor" required maxlength="100">
+            <button type="submit">Adicionar</button>
+          </form>
+          <ul id="listaProfessores" class="lista-cadastros"></ul>
+        </div>
+        <div class="cartao">
+          <h3>Salas</h3>
+          <form id="formSala" class="form-linha">
+            <input id="nomeSala" type="text" placeholder="Nome da sala (ex.: C104)" required maxlength="50">
+            <button type="submit">Adicionar</button>
+          </form>
+          <ul id="listaSalas" class="lista-cadastros"></ul>
+        </div>
+      </div>
+      <p class="nota">A primeira versão não apaga automaticamente cadastros usados em aulas. Se você excluir um nome, as aulas existentes continuarão guardando o texto registrado nelas.</p>
+    </section>
+
+    <section id="aba-configuracao" class="painel escondido">
+      <h2>Configuração dos horários</h2>
+      <p class="intro">Defina os períodos de cada curso. A configuração é compartilhada por todas as turmas daquele curso.</p>
+      <div id="configCursos" class="config-cursos"></div>
+      <div class="cartao">
+        <h3>Turmas</h3>
+        <p class="nota">As alterações são salvas automaticamente neste navegador. Você também pode exportar um JSON como backup. É possível alterar o número de turmas do curso Coringa (1 ou 2); as quantidades dos demais cursos começam com os valores combinados.</p>
+        <div id="configTurmas" class="config-turmas"></div>
+      </div>
+      <button id="aplicarConfigBtn">Aplicar configurações</button>
+      <p id="mensagemConfig" class="mensagem" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <dialog id="modalAula">
+    <form id="formAula" method="dialog">
+      <div class="modal-topo">
+        <div>
+          <h2 id="tituloModal">Editar aula</h2>
+          <p id="detalheModal"></p>
+        </div>
+        <button type="button" id="fecharModal" class="fechar" aria-label="Fechar">×</button>
+      </div>
+      <label>Disciplina
+        <input id="disciplinaAula" type="text" maxlength="100" placeholder="Ex.: Banco de Dados">
+      </label>
+      <label>Duração
+        <select id="duracaoAula">
+          <option value="1">1 período</option>
+          <option value="2">2 períodos consecutivos</option>
+          <option value="4">4 períodos consecutivos</option>
+        </select>
+      </label>
+      <label>Professores <span class="ajuda">(selecione um ou mais)</span>
+        <select id="professoresAula" multiple size="5"></select>
+      </label>
+      <label>Salas <span class="ajuda">(selecione uma ou mais)</span>
+        <select id="salasAula" multiple size="4"></select>
+      </label>
+      <p class="ajuda">Dica: use Ctrl (Windows/Linux) ou Command (Mac) para selecionar vários itens.</p>
+      <div class="botoes-modal">
+        <button type="button" id="limparAulaBtn" class="perigo secundario">Limpar aula</button>
+        <span class="espacador"></span>
+        <button type="button" id="cancelarModalBtn" class="secundario">Cancelar</button>
+        <button type="submit">Salvar aula</button>
+      </div>
+      <p id="erroAula" class="erro" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
