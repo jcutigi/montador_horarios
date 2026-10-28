@@ -6,7 +6,8 @@ let estado = {
   professores: [],
   salas: [],
   cursos: [],
-  aulas: {}
+  aulas: {},
+  atribuicoes: []
 };
 
 let chaveAulaAtual = null;
@@ -25,7 +26,49 @@ function extrairDados(conteudo) {
   if (!estruturaValida) {
     throw new Error("O arquivo não tem a estrutura esperada.");
   }
-  return dados;
+  const atribuicoes = dados.atribuicoes ?? [];
+  if (!Array.isArray(atribuicoes) || atribuicoes.some(item =>
+    !item
+    || typeof item.cursoId !== "string"
+    || !Number.isInteger(item.semestre)
+    || item.semestre < 1
+    || typeof item.sigla !== "string"
+    || !Number.isInteger(item.aulasPorSemana)
+    || item.aulasPorSemana < 1
+    || !Array.isArray(item.professores)
+    || item.professores.some(nome => typeof nome !== "string")
+  )) {
+    throw new Error("A lista de atribuições no arquivo não tem a estrutura esperada.");
+  }
+  const atribuicoesNormalizadas = atribuicoes.map((item, indice) => ({
+    ...item,
+    id: item.id || `atribuicao-legada-${indice}`
+  }));
+  const gruposAula = new Map();
+  Object.entries(dados.aulas).forEach(([chave, aula]) => {
+    if (!aula.grupoId) return;
+    if (!gruposAula.has(aula.grupoId)) gruposAula.set(aula.grupoId, []);
+    gruposAula.get(aula.grupoId).push([chave, aula]);
+  });
+  atribuicoesNormalizadas.forEach(atribuicao => {
+    const jaAlocada = Object.values(dados.aulas).some(aula => aula.atribuicaoId === atribuicao.id);
+    if (jaAlocada) return;
+    const quantidade = Math.ceil(atribuicao.aulasPorSemana / 2);
+    const grupo = [...gruposAula.values()].find(aulas => {
+      if (aulas.length !== quantidade || aulas.some(([, aula]) => aula.atribuicaoId)) return false;
+      const [chave, primeiraAula] = aulas[0];
+      const [cursoId, turma] = chave.split("|");
+      return cursoId === atribuicao.cursoId
+        && Number(turma) + 1 === atribuicao.semestre
+        && primeiraAula.disciplina === atribuicao.sigla
+        && JSON.stringify(primeiraAula.professores || []) === JSON.stringify(atribuicao.professores);
+    });
+    grupo?.forEach(([, aula]) => { aula.atribuicaoId = atribuicao.id; });
+  });
+  return {
+    ...dados,
+    atribuicoes: atribuicoesNormalizadas
+  };
 }
 
 function salvarEstado() {
@@ -42,6 +85,9 @@ function escaparHtml(texto) {
 }
 
 function turmaNome(curso, indice) { return curso.id === "CORINGA" ? `Coringa ${indice + 1}` : `${curso.id} ${indice + 1}º`; }
+function normalizarTexto(texto) {
+  return String(texto ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]/g, "");
+}
 function chaveAula(cursoId, turmaIndice, diaIndice, horarioIndice) { return `${cursoId}|${turmaIndice}|${diaIndice}|${horarioIndice}`; }
 function buscarCurso(id) { return estado.cursos.find(c => c.id === id); }
 function formatarHorario(h) { return `${h.inicio}–${h.fim}`; }
@@ -144,7 +190,26 @@ function renderizarGrade() {
     for (let t=0; t<curso.quantidade; t++) {
       const bloco = document.createElement("div");
       bloco.className = "turma";
-        let html = `<h4>${escaparHtml(turmaNome(curso, t))}</h4><table><thead><tr><th>Horário</th>${DIAS.map(d => `<th>${escaparHtml(d)}</th>`).join("")}</tr></thead><tbody>`;
+      const atribuicoesAlocadas = new Set(
+        Object.values(estado.aulas).map(aula => aula.atribuicaoId).filter(Boolean)
+      );
+      const atribuicoes = estado.atribuicoes
+        .map((item, indice) => ({item, indice}))
+        .filter(({item}) => item.cursoId === curso.id && item.semestre === t + 1 && !atribuicoesAlocadas.has(item.id));
+      let html = `<h4>${escaparHtml(turmaNome(curso, t))}</h4>`;
+      html += `<div class="atribuicoes-turma" aria-label="Atribuições do semestre ${t + 1}">
+        <h5>Atribuições do semestre <span>— arraste para o horário; arraste uma aula de volta para devolver</span></h5>`;
+      if (atribuicoes.length) {
+        html += `<div class="cartoes-atribuicao">${atribuicoes.map(({item}) => `<article class="cartao-atribuicao" draggable="true" data-atribuicao="${escaparHtml(item.id)}" title="Arraste para um horário">
+            <strong>${escaparHtml(item.sigla)}</strong>
+            <span>${escaparHtml(item.aulasPorSemana)} aulas por semana</span>
+            <span>${escaparHtml((item.professores || []).join(", "))}</span>
+          </article>`).join("")}</div>`;
+      } else {
+        html += `<p class="zona-devolucao">Arraste uma disciplina da grade para cá para devolvê-la.</p>`;
+      }
+      html += "</div>";
+      html += `<table><thead><tr><th>Horário</th>${DIAS.map(d => `<th>${escaparHtml(d)}</th>`).join("")}</tr></thead><tbody>`;
       for (let h=0; h<curso.horarios.length; h++) {
         html += `<tr><td class="horario">${escaparHtml(formatarHorario(curso.horarios[h]))}</td>`;
         for (let d=0; d<DIAS.length; d++) {
@@ -179,7 +244,61 @@ function renderizarGrade() {
     secao.appendChild(turmas);
     container.appendChild(secao);
   }
-  container.querySelectorAll("[data-chave]").forEach(btn => btn.addEventListener("click", () => abrirModal(btn.dataset.chave)));
+  container.querySelectorAll(".cartao-atribuicao").forEach(cartao => {
+    cartao.addEventListener("dragstart", evento => {
+      evento.dataTransfer.setData("text/plain", JSON.stringify({
+        tipo: "atribuicao",
+        atribuicaoId: cartao.dataset.atribuicao
+      }));
+      evento.dataTransfer.effectAllowed = "copy";
+      cartao.classList.add("arrastando");
+    });
+    cartao.addEventListener("dragend", () => cartao.classList.remove("arrastando"));
+  });
+  container.querySelectorAll(".atribuicoes-turma").forEach(zona => {
+    zona.addEventListener("dragover", evento => {
+      evento.preventDefault();
+      evento.dataTransfer.dropEffect = evento.dataTransfer.effectAllowed === "move" ? "move" : "copy";
+      zona.classList.add("recebendo-aula");
+    });
+    zona.addEventListener("dragleave", () => zona.classList.remove("recebendo-aula"));
+    zona.addEventListener("drop", evento => {
+      const dados = obterDadosArraste(evento);
+      if (dados?.tipo !== "aula") return;
+      evento.preventDefault();
+      zona.classList.remove("recebendo-aula");
+      devolverAulaParaAtribuicao(dados.chave, dados.grupoId);
+    });
+  });
+  container.querySelectorAll("[data-chave]").forEach(btn => {
+    btn.addEventListener("click", () => abrirModal(btn.dataset.chave));
+    btn.draggable = Boolean(estado.aulas[btn.dataset.chave]);
+    btn.addEventListener("dragstart", evento => {
+      const aula = estado.aulas[btn.dataset.chave];
+      evento.dataTransfer.setData("text/plain", JSON.stringify({
+        tipo: "aula",
+        chave: btn.dataset.chave,
+        grupoId: aula?.grupoId || ""
+      }));
+      evento.dataTransfer.effectAllowed = "move";
+    });
+    btn.addEventListener("dragover", evento => {
+      evento.preventDefault();
+      evento.dataTransfer.dropEffect = evento.dataTransfer.effectAllowed === "move" ? "move" : "copy";
+      btn.classList.add("destino-arraste");
+    });
+    btn.addEventListener("dragleave", () => btn.classList.remove("destino-arraste"));
+    btn.addEventListener("drop", evento => {
+      evento.preventDefault();
+      btn.classList.remove("destino-arraste");
+      const dados = obterDadosArraste(evento);
+      if (dados?.tipo === "atribuicao") {
+        colocarAtribuicaoNoHorario(dados.atribuicaoId, btn.dataset.chave);
+      } else if (dados?.tipo === "aula") {
+        moverAulaNoHorario(dados, btn.dataset.chave);
+      }
+    });
+  });
   const resumo = document.getElementById("resumoConflitos");
   const aulasComAvisoDescanso = avisosDescanso.size;
   if (conflitos.size || aulasComAvisoDescanso) {
@@ -195,6 +314,136 @@ function renderizarGrade() {
     resumo.className = "resumo";
     resumo.textContent = estado.cursos.length ? "Nenhum conflito de professor ou sala detectado." : "";
   }
+}
+
+function dadosArraste(evento) {
+  return evento.dataTransfer.getData("text/plain");
+}
+
+function obterDadosArraste(evento) {
+  try {
+    return JSON.parse(dadosArraste(evento));
+  } catch (erro) {
+    console.error("Não foi possível ler os dados da operação de arraste:", erro);
+    return null;
+  }
+}
+
+function obterAulasDoGrupo(chave, grupoId) {
+  return Object.entries(estado.aulas).filter(([chaveAulaItem, aula]) =>
+    grupoId ? aula.grupoId === grupoId : chaveAulaItem === chave
+  );
+}
+
+function colocarAtribuicaoNoHorario(atribuicaoId, chave) {
+  const atribuicao = estado.atribuicoes.find(item => item.id === atribuicaoId);
+  if (!atribuicao) {
+    alert("Não foi possível encontrar a atribuição arrastada. Tente novamente.");
+    return;
+  }
+  if (Object.values(estado.aulas).some(aula => aula.atribuicaoId === atribuicao.id)) {
+    alert("Essa atribuição já está em um horário.");
+    return;
+  }
+  const [cursoId, turmaTexto, diaTexto, inicioTexto] = chave.split("|");
+  const turma = Number(turmaTexto);
+  const dia = Number(diaTexto);
+  const inicio = Number(inicioTexto);
+  const curso = buscarCurso(cursoId);
+  if (!curso || atribuicao.cursoId !== cursoId || atribuicao.semestre !== turma + 1) {
+    alert("A disciplina só pode ser colocada no horário da turma correspondente.");
+    return;
+  }
+
+  const duracao = Math.ceil(atribuicao.aulasPorSemana / 2);
+  if (inicio + duracao > curso.horarios.length) {
+    alert(`Não há ${duracao} célula(s) consecutiva(s) disponível(is) a partir deste horário para ${curso.nome}.`);
+    return;
+  }
+  const chavesDestino = Array.from({length: duracao}, (_, offset) =>
+    chaveAula(cursoId, turma, dia, inicio + offset)
+  );
+  if (chavesDestino.some(chaveDestino => estado.aulas[chaveDestino])) {
+    alert("Um dos períodos necessários já contém uma aula. Escolha um horário livre.");
+    return;
+  }
+
+  const grupoId = `aula-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  chavesDestino.forEach((chaveDestino, indiceSegmento) => {
+    estado.aulas[chaveDestino] = {
+      disciplina: atribuicao.sigla,
+      professores: [...atribuicao.professores],
+      salas: [],
+      grupoId,
+      indiceSegmento,
+      atribuicaoId: atribuicao.id
+    };
+  });
+  salvarEstado();
+  renderizarGrade();
+}
+
+function moverAulaNoHorario(dados, chaveDestino) {
+  const aulasOrigem = obterAulasDoGrupo(dados.chave, dados.grupoId);
+  if (!aulasOrigem.length) {
+    alert("Não foi possível encontrar a aula arrastada. Tente novamente.");
+    return;
+  }
+  const [cursoOrigem, turmaOrigem] = dados.chave.split("|");
+  const [cursoDestino, turmaDestino, diaDestinoTexto, horarioDestinoTexto] = chaveDestino.split("|");
+  if (cursoOrigem !== cursoDestino || turmaOrigem !== turmaDestino) {
+    alert("A aula só pode ser movida para outro horário da mesma turma.");
+    return;
+  }
+  const curso = buscarCurso(cursoDestino);
+  const indiceOrigem = Number(estado.aulas[dados.chave]?.indiceSegmento || 0);
+  const inicioDestino = Number(horarioDestinoTexto) - indiceOrigem;
+  const diaDestino = Number(diaDestinoTexto);
+  const aulasOrdenadas = [...aulasOrigem].sort((a, b) =>
+    Number(a[1].indiceSegmento || 0) - Number(b[1].indiceSegmento || 0)
+  );
+  const quantidade = aulasOrdenadas.length;
+  if (inicioDestino < 0 || inicioDestino + quantidade > curso.horarios.length) {
+    alert(`A aula não cabe nesse horário: são necessárias ${quantidade} célula(s) consecutiva(s).`);
+    return;
+  }
+
+  const chavesOrigem = new Set(aulasOrigem.map(([chave]) => chave));
+  const [cursoId, turma] = chaveDestino.split("|");
+  const chavesDestino = Array.from({length: quantidade}, (_, indice) =>
+    chaveAula(cursoId, Number(turma), diaDestino, inicioDestino + indice)
+  );
+  if (chavesDestino.some(chave => estado.aulas[chave] && !chavesOrigem.has(chave))) {
+    alert("Um dos períodos necessários já contém outra aula. Escolha um horário livre.");
+    return;
+  }
+
+  aulasOrigem.forEach(([chave]) => delete estado.aulas[chave]);
+  const grupoId = dados.grupoId || `aula-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  chavesDestino.forEach((chave, indiceSegmento) => {
+    estado.aulas[chave] = {
+      ...aulasOrdenadas[indiceSegmento][1],
+      grupoId,
+      indiceSegmento
+    };
+  });
+  salvarEstado();
+  renderizarGrade();
+}
+
+function devolverAulaParaAtribuicao(chave, grupoId) {
+  const aulas = obterAulasDoGrupo(chave, grupoId);
+  if (!aulas.length) {
+    alert("Não foi possível encontrar a aula arrastada. Tente novamente.");
+    return;
+  }
+  if (!aulas.some(([, aula]) => aula.atribuicaoId)) {
+    alert("Somente aulas importadas da atribuição podem ser devolvidas para a lista.");
+    return;
+  }
+  aulas.forEach(([chaveAulaItem]) => delete estado.aulas[chaveAulaItem]);
+  salvarEstado();
+  renderizarGrade();
 }
 
 function renderizarCadastros() {
@@ -417,6 +666,143 @@ document.getElementById("exportarBtn").addEventListener("click", () => {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+});
+
+function contarSeparadoresCsv(linha, separador) {
+  let emAspas = false;
+  let quantidade = 0;
+  for (let i = 0; i < linha.length; i++) {
+    if (linha[i] === '"') {
+      if (emAspas && linha[i + 1] === '"') i++;
+      else emAspas = !emAspas;
+    } else if (linha[i] === separador && !emAspas) {
+      quantidade++;
+    }
+  }
+  return quantidade;
+}
+
+function analisarCsv(texto) {
+  const primeiraLinha = texto.replace(/^\uFEFF/, "").split(/\r?\n/).find(linha => linha.trim());
+  if (!primeiraLinha) throw new Error("O arquivo está vazio.");
+  const separador = [",", ";", "\t"].sort((a, b) =>
+    contarSeparadoresCsv(primeiraLinha, b) - contarSeparadoresCsv(primeiraLinha, a)
+  )[0];
+  const linhas = [];
+  let linha = [];
+  let campo = "";
+  let emAspas = false;
+  const conteudo = texto.replace(/^\uFEFF/, "");
+
+  for (let i = 0; i < conteudo.length; i++) {
+    const caractere = conteudo[i];
+    if (caractere === '"') {
+      if (emAspas && conteudo[i + 1] === '"') {
+        campo += '"';
+        i++;
+      } else {
+        emAspas = !emAspas;
+      }
+    } else if (caractere === separador && !emAspas) {
+      linha.push(campo.trim());
+      campo = "";
+    } else if ((caractere === "\n" || caractere === "\r") && !emAspas) {
+      if (caractere === "\r" && conteudo[i + 1] === "\n") i++;
+      linha.push(campo.trim());
+      if (linha.some(valor => valor)) linhas.push(linha);
+      linha = [];
+      campo = "";
+    } else {
+      campo += caractere;
+    }
+  }
+  if (emAspas) throw new Error("Há um campo com aspas sem fechamento.");
+  linha.push(campo.trim());
+  if (linha.some(valor => valor)) linhas.push(linha);
+  return linhas;
+}
+
+function importarAtribuicoes(texto) {
+  const linhas = analisarCsv(texto);
+  const cabecalhos = linhas[0].map(normalizarTexto);
+  const indices = {
+    curso: cabecalhos.indexOf("curso"),
+    semestre: cabecalhos.indexOf("semestre"),
+    sigla: cabecalhos.indexOf("sigla"),
+    aulasPorSemana: cabecalhos.indexOf("aulasporsemana"),
+    docente: cabecalhos.indexOf("docente"),
+    docente2: cabecalhos.indexOf("docente2")
+  };
+  const obrigatorios = ["curso", "semestre", "sigla", "aulasPorSemana", "docente"];
+  const ausentes = obrigatorios.filter(campo => indices[campo] === -1);
+  if (ausentes.length) {
+    throw new Error(`Colunas obrigatórias ausentes: ${ausentes.map(campo => ({
+      curso: "Curso",
+      semestre: "Semestre",
+      sigla: "Sigla",
+      aulasPorSemana: "Aulas por semana",
+      docente: "Docente"
+    }[campo])).join(", ")}.`);
+  }
+
+  const novasAtribuicoes = linhas.slice(1).map((linha, indice) => {
+    const linhaCsv = indice + 2;
+    const cursoInformado = linha[indices.curso] || "";
+    const curso = estado.cursos.find(item =>
+      normalizarTexto(item.id) === normalizarTexto(cursoInformado)
+      || normalizarTexto(item.nome) === normalizarTexto(cursoInformado)
+    );
+    const semestreTexto = linha[indices.semestre] || "";
+    const semestre = Number(semestreTexto.match(/\d+/)?.[0]);
+    const sigla = linha[indices.sigla] || "";
+    const aulasPorSemanaTexto = linha[indices.aulasPorSemana] || "";
+    const aulasPorSemana = Number(aulasPorSemanaTexto);
+    const professores = [linha[indices.docente], indices.docente2 === -1 ? "" : linha[indices.docente2]]
+      .map(nome => (nome || "").trim())
+      .filter(Boolean);
+
+    if (!cursoInformado || !curso) throw new Error(`Linha ${linhaCsv}: curso "${cursoInformado}" não encontrado.`);
+    if (!Number.isInteger(semestre) || semestre < 1) throw new Error(`Linha ${linhaCsv}: semestre inválido.`);
+    if (!sigla) throw new Error(`Linha ${linhaCsv}: sigla não informada.`);
+    if (!/^\d+$/.test(aulasPorSemanaTexto) || !Number.isInteger(aulasPorSemana) || aulasPorSemana < 1) {
+      throw new Error(`Linha ${linhaCsv}: "Aulas por semana" deve ser um número inteiro positivo.`);
+    }
+    if (!professores.length) throw new Error(`Linha ${linhaCsv}: informe ao menos um docente.`);
+
+    return {
+      id: `atribuicao-${Date.now()}-${indice}-${Math.random().toString(36).slice(2, 8)}`,
+      cursoId: curso.id,
+      semestre,
+      sigla,
+      aulasPorSemana,
+      professores
+    };
+  });
+  if (!novasAtribuicoes.length) throw new Error("O arquivo não contém linhas de atribuição.");
+
+  const nomesProfessores = new Map(estado.professores.map(nome => [normalizarTexto(nome), nome]));
+  novasAtribuicoes.flatMap(item => item.professores).forEach(nome => {
+    if (!nomesProfessores.has(normalizarTexto(nome))) nomesProfessores.set(normalizarTexto(nome), nome);
+  });
+  estado.professores = [...nomesProfessores.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  estado.atribuicoes = novasAtribuicoes;
+}
+
+document.getElementById("importarAtribuicao").addEventListener("change", async e => {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+
+  try {
+    importarAtribuicoes(await arquivo.text());
+    salvarEstado();
+    renderizarTudo();
+    alert(`Atribuição importada com sucesso. Professores cadastrados e ${estado.atribuicoes.length} disciplina(s) adicionada(s).`);
+  } catch (erro) {
+    console.error("Não foi possível importar a atribuição:", erro);
+    alert(`Não foi possível importar a atribuição: ${erro.message}`);
+  } finally {
+    e.target.value = "";
+  }
 });
 
 document.getElementById("importarArquivo").addEventListener("change", async e => {

@@ -15,6 +15,8 @@ Aplicação web para montar manualmente horários de cursos e turmas, atribuindo
 - Permite ajustar os períodos e as quantidades de turmas.
 - Salva as alterações automaticamente no armazenamento local do navegador (`localStorage`).
 - Permite importar e exportar os dados em JSON. Uma importação válida substitui os dados atuais e os salvos no navegador.
+- Permite importar atribuições em CSV (separado por vírgula, ponto e vírgula ou tabulação). As disciplinas e docentes aparecem em cartões acima da grade do curso e semestre correspondente; docentes ainda não cadastrados são adicionados automaticamente.
+- Permite arrastar uma atribuição para a grade, onde ela deixa de aparecer na lista; cada duas aulas semanais ocupam uma célula consecutiva (quatro aulas ocupam duas células; duas aulas ocupam uma). Aulas atribuídas podem ser movidas para outras células da mesma turma ou arrastadas de volta à lista para liberar a atribuição.
 
 ## Como executar
 
@@ -35,6 +37,8 @@ O arquivo `dados.json` fornece os dados iniciais quando ainda não há dados sal
 A importação aceita o formato de backup exportado pela aplicação (`formato: "montador-horarios"`, com os dados dentro de `dados`) ou um objeto que contenha diretamente `professores`, `salas`, `cursos` e `aulas`.
 
 Exportar JSON cria um arquivo de backup que pode ser importado posteriormente. O `localStorage` é específico do navegador e da origem usada para acessar a aplicação; ele não substitui um backup e não sincroniza dados entre dispositivos.
+
+A importação de atribuição espera as colunas `Curso`, `Semestre`, `Sigla`, `Aulas por semana`, `Docente` e, opcionalmente, `Docente2`. Ela substitui a lista de atribuições importada anteriormente, sem alterar horários ou cadastros existentes, e acrescenta os docentes novos ao cadastro.
 
 ## Limitações do piloto
 
