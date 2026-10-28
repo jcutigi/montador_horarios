@@ -91,22 +91,25 @@
       <label>Disciplina
         <input id="disciplinaAula" type="text" maxlength="100" placeholder="Ex.: Banco de Dados">
       </label>
-      <label>Duração
+      <label id="duracaoAulaCampo">Duração
         <select id="duracaoAula">
           <option value="1">1 período</option>
           <option value="2">2 períodos consecutivos</option>
           <option value="4">4 períodos consecutivos</option>
         </select>
       </label>
-      <label class="opcao-bloqueio">
+      <label id="aulasPorSemanaCampo" class="escondido">Aulas por semana
+        <input id="aulasPorSemanaAula" type="number" min="1" step="1">
+      </label>
+      <label id="bloquearHorarioCampo" class="opcao-bloqueio">
         <input id="bloquearHorario" type="checkbox">
         Não é possível colocar disciplinas neste horário
       </label>
-      <p id="ajudaBloqueio" class="ajuda"></p>
+      <p id="ajudaBloqueio" class="ajuda escondido"></p>
       <label>Professores <span class="ajuda">(selecione um ou mais)</span>
         <select id="professoresAula" multiple size="5"></select>
       </label>
-      <label>Salas <span class="ajuda">(selecione uma ou mais)</span>
+      <label id="salasAulaCampo">Salas <span class="ajuda">(selecione uma ou mais)</span>
         <select id="salasAula" multiple size="4"></select>
       </label>
       <p class="ajuda">Dica: use Ctrl (Windows/Linux) ou Command (Mac) para selecionar vários itens.</p>
@@ -117,34 +120,6 @@
         <button type="submit">Salvar aula</button>
       </div>
       <p id="erroAula" class="erro" aria-live="polite"></p>
-    </form>
-  </dialog>
-
-  <dialog id="modalAtribuicao">
-    <form id="formAtribuicao" method="dialog">
-      <div class="modal-topo">
-        <div>
-          <h2>Editar disciplina</h2>
-          <p id="detalheAtribuicaoModal"></p>
-        </div>
-        <button type="button" id="fecharAtribuicaoModal" class="fechar" aria-label="Fechar">×</button>
-      </div>
-      <label>Disciplina
-        <input id="siglaAtribuicao" type="text" maxlength="100" required>
-      </label>
-      <label>Aulas por semana
-        <input id="aulasPorSemanaAtribuicao" type="number" min="1" step="1" required>
-      </label>
-      <label>Professores <span class="ajuda">(selecione um ou mais)</span>
-        <select id="professoresAtribuicao" multiple size="5"></select>
-      </label>
-      <p class="ajuda">Use Ctrl (Windows/Linux) ou Command (Mac) para selecionar vários itens.</p>
-      <div class="botoes-modal">
-        <span class="espacador"></span>
-        <button type="button" id="cancelarAtribuicaoModal" class="secundario">Cancelar</button>
-        <button type="submit">Salvar disciplina</button>
-      </div>
-      <p id="erroAtribuicao" class="erro" aria-live="polite"></p>
     </form>
   </dialog>
 

@@ -61,7 +61,8 @@ p { line-height: 1.45; }
 .turma th, .turma td { border: 1px solid #e1e7eb; padding: 0; vertical-align: stretch; }
 .turma th { background: #f1f5f9; padding: 6px 3px; }
 .turma th:first-child { width: 125px; }
-.celula-aula { width: 100%; min-height: 76px; padding: 8px 7px; background: white; color: #334155; border-radius: 0; display: block; text-align: left; font-weight: 400; overflow-wrap: anywhere; }
+.celula-container { position: relative; min-height: 76px; }
+.celula-aula { width: 100%; min-height: 76px; padding: 8px 32px 8px 7px; background: white; color: #334155; border-radius: 0; display: block; text-align: left; font-weight: 400; overflow-wrap: anywhere; }
 .celula-aula:hover { background: #f0fdf4; }
 .celula-aula.destino-arraste { background: #dcfce7; box-shadow: inset 0 0 0 3px #16a34a; }
 .celula-aula[draggable="true"] { cursor: grab; }
@@ -75,6 +76,9 @@ p { line-height: 1.45; }
 .celula-aula .detalhe { display: block; font-size: .72rem; margin-top: 3px; }
 .celula-aula .conflito-descricao { font-weight: 700; }
 .celula-aula .descanso-descricao { font-weight: 700; }
+.alternar-indisponibilidade { position: absolute; top: 3px; right: 3px; width: 26px; height: 26px; padding: 0; border: 1px solid #cbd5e1; border-radius: 5px; background: #fff; color: #475569; font-size: 1rem; line-height: 1; }
+.alternar-indisponibilidade:hover { background: #e2e8f0; }
+.alternar-indisponibilidade.marcado { background: #334155; border-color: #334155; color: white; }
 .horario { padding: 5px 4px; background: #f8fafc; text-align: center; font-size: .72rem; color: #475569; }
 .duas-colunas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .cartao { background: white; border: 1px solid #dbe2e8; border-radius: 10px; padding: 18px; margin: 16px 0; }

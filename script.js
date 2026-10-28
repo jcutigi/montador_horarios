@@ -269,13 +269,13 @@ function renderizarGrade() {
           const professores = (aula.professores || []).join(", ");
           const salas = (aula.salas || []).join(", ");
           const continuacao = Boolean(aula.grupoId && aula.indiceSegmento > 0);
-          html += `<td><button class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""}" data-chave="${escaparHtml(chave)}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
+          html += `<td><div class="celula-container"><button class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""}" data-chave="${escaparHtml(chave)}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
             ${indisponivel ? `<span class="disciplina">Indisponível</span>` : (continuacao ? `<span class="detalhe">↳ continuação</span>` : (aula.disciplina?`<span class="disciplina">${escaparHtml(aula.disciplina)}</span>`:`<span class="ajuda">+ Aula</span>`))}
             ${!continuacao && professores?`<span class="detalhe">${escaparHtml(professores)}</span>`:""}
             ${!continuacao && salas?`<span class="detalhe">${escaparHtml(salas)}</span>`:""}
             ${detalhesConflito.map(detalhe => `<span class="detalhe conflito-descricao">${escaparHtml(detalhe)}</span>`).join("")}
             ${detalhesDescanso.map(detalhe => `<span class="detalhe descanso-descricao">${escaparHtml(detalhe)}</span>`).join("")}
-          </button></td>`;
+          </button><button type="button" class="alternar-indisponibilidade ${indisponivel?"marcado":""}" data-indisponibilidade="${escaparHtml(chave)}" aria-label="${indisponivel?"Liberar este horário":"Marcar este horário como indisponível"}" title="${indisponivel?"Liberar horário":"Marcar horário como indisponível"}">${indisponivel?"↻":"⊘"}</button></div></td>`;
         }
         html += "</tr>";
       }
@@ -357,6 +357,9 @@ function renderizarGrade() {
       }
     });
   });
+  container.querySelectorAll("[data-indisponibilidade]").forEach(btn => {
+    btn.addEventListener("click", () => alternarIndisponibilidade(btn.dataset.indisponibilidade));
+  });
   const resumo = document.getElementById("resumoConflitos");
   const aulasComAvisoDescanso = avisosDescanso.size;
   if (conflitos.size || aulasComAvisoDescanso) {
@@ -372,6 +375,20 @@ function renderizarGrade() {
     resumo.className = "resumo";
     resumo.textContent = estado.cursos.length ? "Nenhum conflito de professor ou sala detectado." : "";
   }
+}
+
+function alternarIndisponibilidade(chave) {
+  const aula = estado.aulas[chave];
+  if (aula?.bloqueado) {
+    delete estado.aulas[chave];
+  } else if (aula && (aula.disciplina || aula.professores?.length || aula.salas?.length)) {
+    alert("Remova a aula antes de marcar este horário como indisponível.");
+    return;
+  } else {
+    estado.aulas[chave] = {bloqueado:true};
+  }
+  salvarEstado();
+  renderizarGrade();
 }
 
 function dadosArraste(evento) {
@@ -567,6 +584,7 @@ function adicionarLinhaHorario(container,h,i) {
 }
 
 function abrirModal(chave) {
+  atribuicaoAtual = null;
   chaveAulaAtual = chave;
   const [cursoId,t,d,h] = chave.split("|");
   const curso = buscarCurso(cursoId);
@@ -585,6 +603,12 @@ function abrirModal(chave) {
   document.getElementById("tituloModal").textContent = `${curso.nome} — ${turmaNome(curso,Number(t))}`;
   document.getElementById("detalheModal").textContent = `${DIAS[Number(d)]}, ${formatarHorario(curso.horarios[Number(h)])}`;
   document.getElementById("disciplinaAula").value = aula.disciplina || "";
+  document.getElementById("duracaoAulaCampo").classList.remove("escondido");
+  document.getElementById("aulasPorSemanaCampo").classList.add("escondido");
+  document.getElementById("bloquearHorarioCampo").classList.remove("escondido");
+  document.getElementById("salasAulaCampo").classList.remove("escondido");
+  document.getElementById("limparAulaBtn").classList.remove("escondido");
+  document.querySelector('#formAula button[type="submit"]').textContent = "Salvar aula";
   preencherSelect("professoresAula",estado.professores,aula.professores || []);
   preencherSelect("salasAula",estado.salas,aula.salas || []);
   const bloqueio = document.getElementById("bloquearHorario");
@@ -593,9 +617,9 @@ function abrirModal(chave) {
   ));
   bloqueio.checked = Boolean(aulaOriginal?.bloqueado);
   bloqueio.disabled = aulaOcupada;
-  document.getElementById("ajudaBloqueio").textContent = aulaOcupada
-    ? "Remova a aula antes de marcar este horário como indisponível."
-    : "";
+  const ajudaBloqueio = document.getElementById("ajudaBloqueio");
+  ajudaBloqueio.textContent = aulaOcupada ? "Remova a aula antes de marcar este horário como indisponível." : "";
+  ajudaBloqueio.classList.toggle("escondido", !aulaOcupada);
   document.getElementById("erroAula").textContent = "";
   document.getElementById("modalAula").showModal();
 }
@@ -607,14 +631,24 @@ function abrirModalAtribuicao(id) {
     return;
   }
   atribuicaoAtual = id;
+  chaveAulaAtual = null;
   const curso = buscarCurso(atribuicao.cursoId);
-  document.getElementById("detalheAtribuicaoModal").textContent =
+  document.getElementById("tituloModal").textContent = "Editar disciplina";
+  document.getElementById("detalheModal").textContent =
     `${curso?.nome || atribuicao.cursoId} — ${atribuicao.semestre}º semestre`;
-  document.getElementById("siglaAtribuicao").value = atribuicao.sigla;
-  document.getElementById("aulasPorSemanaAtribuicao").value = atribuicao.aulasPorSemana;
-  preencherSelect("professoresAtribuicao", estado.professores, atribuicao.professores || []);
-  document.getElementById("erroAtribuicao").textContent = "";
-  document.getElementById("modalAtribuicao").showModal();
+  document.getElementById("disciplinaAula").value = atribuicao.sigla;
+  document.getElementById("aulasPorSemanaAula").value = atribuicao.aulasPorSemana;
+  document.getElementById("duracaoAulaCampo").classList.add("escondido");
+  document.getElementById("aulasPorSemanaCampo").classList.remove("escondido");
+  document.getElementById("bloquearHorarioCampo").classList.add("escondido");
+  document.getElementById("ajudaBloqueio").classList.add("escondido");
+  document.getElementById("salasAulaCampo").classList.add("escondido");
+  document.getElementById("limparAulaBtn").classList.add("escondido");
+  document.querySelector('#formAula button[type="submit"]').textContent = "Salvar disciplina";
+  preencherSelect("professoresAula", estado.professores, atribuicao.professores || []);
+  preencherSelect("salasAula", estado.salas, []);
+  document.getElementById("erroAula").textContent = "";
+  document.getElementById("modalAula").showModal();
 }
 
 function preencherSelect(id, itens, selecionados) {
@@ -661,6 +695,10 @@ document.getElementById("formSala").addEventListener("submit", e => {
 
 document.getElementById("formAula").addEventListener("submit", e => {
   e.preventDefault();
+  if (atribuicaoAtual) {
+    salvarEdicaoAtribuicao();
+    return;
+  }
   if (!chaveAulaAtual) return;
   const [cursoId, turmaTexto, diaTexto, horarioTexto] = chaveAulaAtual.split("|");
   const curso = buscarCurso(cursoId);
@@ -703,6 +741,13 @@ document.getElementById("formAula").addEventListener("submit", e => {
     }
     chavesAntigas.forEach(k => delete estado.aulas[k]);
     const grupoId = `aula-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+    if (aulaAntiga?.atribuicaoId) {
+      const atribuicao = estado.atribuicoes.find(item => item.id === aulaAntiga.atribuicaoId);
+      if (atribuicao) {
+        atribuicao.sigla = disciplina;
+        atribuicao.professores = [...professores];
+      }
+    }
     for (let offset=0; offset<duracao; offset++) {
       estado.aulas[chaveAula(cursoId,turma,dia,inicio+offset)] = {
         disciplina, professores:[...professores], salas:[...salas], grupoId, indiceSegmento:offset,
@@ -710,12 +755,51 @@ document.getElementById("formAula").addEventListener("submit", e => {
       };
     }
   }
-  document.getElementById("modalAula").close(); 
+  fecharModal();
   salvarEstado();
   renderizarGrade();
 });
 
-function fecharModal() { document.getElementById("modalAula").close(); }
+function salvarEdicaoAtribuicao() {
+  const atribuicao = estado.atribuicoes.find(item => item.id === atribuicaoAtual);
+  if (!atribuicao) {
+    document.getElementById("erroAula").textContent = "Não foi possível encontrar a disciplina. Feche e tente novamente.";
+    return;
+  }
+  const sigla = document.getElementById("disciplinaAula").value.trim();
+  const aulasPorSemana = Number(document.getElementById("aulasPorSemanaAula").value);
+  const professores = valoresSelecionados("professoresAula");
+  if (!sigla) {
+    document.getElementById("erroAula").textContent = "Informe o nome ou a sigla da disciplina.";
+    return;
+  }
+  if (!Number.isInteger(aulasPorSemana) || aulasPorSemana < 1) {
+    document.getElementById("erroAula").textContent = "A quantidade de aulas por semana deve ser um inteiro positivo.";
+    return;
+  }
+  if (!professores.length) {
+    document.getElementById("erroAula").textContent = "Selecione ao menos um professor.";
+    return;
+  }
+  atribuicao.sigla = sigla;
+  atribuicao.aulasPorSemana = aulasPorSemana;
+  atribuicao.professores = [...professores];
+  Object.values(estado.aulas)
+    .filter(aula => aula.atribuicaoId === atribuicao.id)
+    .forEach(aula => {
+      aula.disciplina = sigla;
+      aula.professores = [...professores];
+    });
+  fecharModal();
+  salvarEstado();
+  renderizarGrade();
+}
+
+function fecharModal() {
+  document.getElementById("modalAula").close();
+  atribuicaoAtual = null;
+  chaveAulaAtual = null;
+}
 document.getElementById("fecharModal").addEventListener("click",fecharModal);
 document.getElementById("cancelarModalBtn").addEventListener("click",fecharModal);
 document.getElementById("limparAulaBtn").addEventListener("click", () => {
@@ -726,48 +810,10 @@ document.getElementById("limparAulaBtn").addEventListener("click", () => {
   } else {
     delete estado.aulas[chaveAulaAtual];
   }
-  fecharModal(); 
+  fecharModal();
   salvarEstado();
   renderizarGrade();
 });
-
-document.getElementById("formAtribuicao").addEventListener("submit", e => {
-  e.preventDefault();
-  const atribuicao = estado.atribuicoes.find(item => item.id === atribuicaoAtual);
-  if (!atribuicao) {
-    document.getElementById("erroAtribuicao").textContent = "Não foi possível encontrar a disciplina. Feche e tente novamente.";
-    return;
-  }
-  const sigla = document.getElementById("siglaAtribuicao").value.trim();
-  const aulasPorSemana = Number(document.getElementById("aulasPorSemanaAtribuicao").value);
-  const professores = valoresSelecionados("professoresAtribuicao");
-  if (!sigla) {
-    document.getElementById("erroAtribuicao").textContent = "Informe o nome ou a sigla da disciplina.";
-    return;
-  }
-  if (!Number.isInteger(aulasPorSemana) || aulasPorSemana < 1) {
-    document.getElementById("erroAtribuicao").textContent = "A quantidade de aulas por semana deve ser um inteiro positivo.";
-    return;
-  }
-  if (!professores.length) {
-    document.getElementById("erroAtribuicao").textContent = "Selecione ao menos um professor.";
-    return;
-  }
-  atribuicao.sigla = sigla;
-  atribuicao.aulasPorSemana = aulasPorSemana;
-  atribuicao.professores = professores;
-  document.getElementById("modalAtribuicao").close();
-  salvarEstado();
-  renderizarGrade();
-});
-
-function fecharModalAtribuicao() {
-  document.getElementById("modalAtribuicao").close();
-  atribuicaoAtual = null;
-}
-
-document.getElementById("fecharAtribuicaoModal").addEventListener("click", fecharModalAtribuicao);
-document.getElementById("cancelarAtribuicaoModal").addEventListener("click", fecharModalAtribuicao);
 
 document.getElementById("limparHorariosBtn").addEventListener("click", () => {
   if (!Object.keys(estado.aulas).length) {
