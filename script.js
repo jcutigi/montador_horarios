@@ -38,12 +38,14 @@ function extrairDados(conteudo) {
     || item.aulasPorSemana < 1
     || !Array.isArray(item.professores)
     || item.professores.some(nome => typeof nome !== "string")
+    || (item.salas !== undefined && (!Array.isArray(item.salas) || item.salas.some(nome => typeof nome !== "string")))
   )) {
     throw new Error("A lista de atribuições no arquivo não tem a estrutura esperada.");
   }
   const atribuicoesNormalizadas = atribuicoes.map((item, indice) => ({
     ...item,
-    id: item.id || `atribuicao-legada-${indice}`
+    id: item.id || `atribuicao-legada-${indice}`,
+    salas: item.salas || []
   }));
   const gruposAula = new Map();
   Object.entries(dados.aulas).forEach(([chave, aula]) => {
@@ -244,6 +246,7 @@ function renderizarGrade() {
             <strong>${escaparHtml(item.sigla)}</strong>
             <span>${escaparHtml(item.aulasPorSemana)} aulas por semana</span>
             <span>${escaparHtml((item.professores || []).join(", "))}</span>
+            ${item.salas?.length ? `<span>${escaparHtml(item.salas.join(", "))}</span>` : ""}
             <button type="button" class="secundario editar-atribuicao" data-editar-atribuicao="${escaparHtml(item.id)}">Editar</button>
           </article>`).join("")}</div>`;
       } else {
@@ -451,7 +454,7 @@ function colocarAtribuicaoNoHorario(atribuicaoId, chave) {
     estado.aulas[chaveDestino] = {
       disciplina: atribuicao.sigla,
       professores: [...atribuicao.professores],
-      salas: [],
+      salas: [...(atribuicao.salas || [])],
       grupoId,
       indiceSegmento,
       atribuicaoId: atribuicao.id
@@ -642,11 +645,11 @@ function abrirModalAtribuicao(id) {
   document.getElementById("aulasPorSemanaCampo").classList.remove("escondido");
   document.getElementById("bloquearHorarioCampo").classList.add("escondido");
   document.getElementById("ajudaBloqueio").classList.add("escondido");
-  document.getElementById("salasAulaCampo").classList.add("escondido");
+  document.getElementById("salasAulaCampo").classList.remove("escondido");
   document.getElementById("limparAulaBtn").classList.add("escondido");
   document.querySelector('#formAula button[type="submit"]').textContent = "Salvar disciplina";
   preencherSelect("professoresAula", estado.professores, atribuicao.professores || []);
-  preencherSelect("salasAula", estado.salas, []);
+  preencherSelect("salasAula", estado.salas, atribuicao.salas || []);
   document.getElementById("erroAula").textContent = "";
   document.getElementById("modalAula").showModal();
 }
@@ -746,6 +749,7 @@ document.getElementById("formAula").addEventListener("submit", e => {
       if (atribuicao) {
         atribuicao.sigla = disciplina;
         atribuicao.professores = [...professores];
+        atribuicao.salas = [...salas];
       }
     }
     for (let offset=0; offset<duracao; offset++) {
@@ -769,6 +773,7 @@ function salvarEdicaoAtribuicao() {
   const sigla = document.getElementById("disciplinaAula").value.trim();
   const aulasPorSemana = Number(document.getElementById("aulasPorSemanaAula").value);
   const professores = valoresSelecionados("professoresAula");
+  const salas = valoresSelecionados("salasAula");
   if (!sigla) {
     document.getElementById("erroAula").textContent = "Informe o nome ou a sigla da disciplina.";
     return;
@@ -784,11 +789,13 @@ function salvarEdicaoAtribuicao() {
   atribuicao.sigla = sigla;
   atribuicao.aulasPorSemana = aulasPorSemana;
   atribuicao.professores = [...professores];
+  atribuicao.salas = [...salas];
   Object.values(estado.aulas)
     .filter(aula => aula.atribuicaoId === atribuicao.id)
     .forEach(aula => {
       aula.disciplina = sigla;
       aula.professores = [...professores];
+      aula.salas = [...salas];
     });
   fecharModal();
   salvarEstado();
@@ -976,7 +983,8 @@ function importarAtribuicoes(texto) {
       semestre,
       sigla,
       aulasPorSemana,
-      professores
+      professores,
+      salas: []
     };
   });
   if (!novasAtribuicoes.length) throw new Error("O arquivo não contém linhas de atribuição.");
