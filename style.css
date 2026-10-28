@@ -38,6 +38,7 @@ p { line-height: 1.45; }
 .resumo { margin: 14px 0; padding: 10px 13px; border-radius: 8px; background: #e8f5ed; color: #14532d; }
 .resumo.tem-conflito { background: #fff0f0; color: #991b1b; }
 .resumo.tem-aviso-descanso { background: #fef9c3; color: #854d0e; }
+.destaque-professor { margin: 14px 0; padding: 9px 13px; border-left: 4px solid #7c3aed; background: #f3e8ff; color: #581c87; }
 .grade-geral { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
 .grade-curso { border: 1px solid #d6dde3; background: white; border-radius: 10px; overflow: hidden; min-width: 0; }
 .grade-curso h3 { margin: 0; padding: 12px 14px; background: #e6edf3; font-size: 1.05rem; }
@@ -72,6 +73,10 @@ p { line-height: 1.45; }
 .celula-aula.conflito { background: #fee2e2; box-shadow: inset 0 0 0 2px #dc2626; color: #7f1d1d; }
 .celula-aula.descanso-insuficiente { background: #fef3c7; box-shadow: inset 0 0 0 2px #eab308; color: #713f12; }
 .celula-aula.conflito.descanso-insuficiente { background: #fef3c7; box-shadow: inset 0 0 0 2px #dc2626; color: #713f12; }
+.celula-aula.professor-destacado { outline: 3px solid #7c3aed; outline-offset: -3px; position: relative; z-index: 1; }
+.celula-aula:focus-visible { outline: 3px solid #93c5fd; outline-offset: -3px; }
+.professor-grade { border-radius: 3px; cursor: pointer; }
+.professor-grade:hover, .professor-grade:focus-visible { background: #ede9fe; color: #5b21b6; text-decoration: underline; }
 .celula-aula .disciplina { display: block; font-weight: 700; margin-bottom: 4px; }
 .celula-aula .detalhe { display: block; font-size: .72rem; margin-top: 3px; }
 .celula-aula .conflito-descricao { font-weight: 700; }

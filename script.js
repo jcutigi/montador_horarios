@@ -13,6 +13,7 @@ let estado = {
 let chaveAulaAtual = null;
 let atribuicaoAtual = null;
 let statusDados = "Carregando dados.json...";
+let professorEmDestaque = null;
 
 function clonar(obj) { return JSON.parse(JSON.stringify(obj)); }
 
@@ -222,6 +223,11 @@ function renderizarGrade() {
   const avisosDescanso = obterAvisosDescanso();
   const atribuicoesAlocadas = obterAtribuicoesAlocadas();
   container.innerHTML = "";
+  const destaque = document.getElementById("destaqueProfessor");
+  destaque.classList.toggle("escondido", !professorEmDestaque);
+  destaque.textContent = professorEmDestaque
+    ? `Aulas de ${professorEmDestaque} destacadas. Clique novamente no nome para remover o destaque.`
+    : "";
   
   if (!estado.cursos.length) {
     container.innerHTML = `<p class="nota">${escaparHtml(statusDados || "Nenhum curso carregado. Importe um arquivo JSON para começar.")}</p>`;
@@ -274,13 +280,14 @@ function renderizarGrade() {
           const professores = (aula.professores || []).join(", ");
           const salas = (aula.salas || []).join(", ");
           const continuacao = Boolean(aula.grupoId && aula.indiceSegmento > 0);
-          html += `<td><div class="celula-container"><button class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""}" data-chave="${escaparHtml(chave)}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
+          const professorDestacado = Boolean(professorEmDestaque && aula.professores?.includes(professorEmDestaque));
+          html += `<td><div class="celula-container"><div class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""} ${professorDestacado?"professor-destacado":""}" data-chave="${escaparHtml(chave)}" role="group" tabindex="0" aria-label="${escaparHtml(indisponivel ? "Horário indisponível" : aula.disciplina || "Horário vazio")}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
             ${indisponivel ? `<span class="disciplina">Indisponível</span>` : (continuacao ? `<span class="detalhe">↳ continuação</span>` : (aula.disciplina?`<span class="disciplina">${escaparHtml(aula.disciplina)}</span>`:`<span class="ajuda">+ Aula</span>`))}
-            ${!continuacao && professores?`<span class="detalhe">${escaparHtml(professores)}</span>`:""}
+            ${!continuacao && aula.professores?.length ? `<span class="detalhe">${aula.professores.map(nome => `<span class="professor-grade" role="button" tabindex="0" aria-pressed="${nome === professorEmDestaque}" aria-label="Destacar aulas de ${escaparHtml(nome)}">${escaparHtml(nome)}</span>`).join(", ")}</span>` : ""}
             ${!continuacao && salas?`<span class="detalhe">${escaparHtml(salas)}</span>`:""}
             ${detalhesConflito.map(detalhe => `<span class="detalhe conflito-descricao">${escaparHtml(detalhe)}</span>`).join("")}
             ${detalhesDescanso.map(detalhe => `<span class="detalhe descanso-descricao">${escaparHtml(detalhe)}</span>`).join("")}
-          </button><button type="button" class="alternar-indisponibilidade ${indisponivel?"marcado":""}" data-indisponibilidade="${escaparHtml(chave)}" aria-label="${indisponivel?"Liberar este horário":"Marcar este horário como indisponível"}" title="${indisponivel?"Liberar horário":"Marcar horário como indisponível"}">${indisponivel?"↻":"⊘"}</button></div></td>`;
+          </div><button type="button" class="alternar-indisponibilidade ${indisponivel?"marcado":""}" data-indisponibilidade="${escaparHtml(chave)}" aria-label="${indisponivel?"Liberar este horário":"Marcar este horário como indisponível"}" title="${indisponivel?"Liberar horário":"Marcar horário como indisponível"}">${indisponivel?"↻":"⊘"}</button></div></td>`;
         }
         html += "</tr>";
       }
@@ -335,6 +342,26 @@ function renderizarGrade() {
   });
   container.querySelectorAll("[data-chave]").forEach(btn => {
     btn.addEventListener("click", () => abrirModal(btn.dataset.chave));
+    btn.addEventListener("keydown", evento => {
+      if (evento.target === btn && (evento.key === "Enter" || evento.key === " ")) {
+        evento.preventDefault();
+        abrirModal(btn.dataset.chave);
+      }
+    });
+    btn.querySelectorAll(".professor-grade").forEach(nome => {
+      const alternarDestaque = evento => {
+        evento.stopPropagation();
+        professorEmDestaque = professorEmDestaque === nome.textContent ? null : nome.textContent;
+        renderizarGrade();
+      };
+      nome.addEventListener("click", alternarDestaque);
+      nome.addEventListener("keydown", evento => {
+        if (evento.key === "Enter" || evento.key === " ") {
+          evento.preventDefault();
+          alternarDestaque(evento);
+        }
+      });
+    });
     btn.draggable = Boolean(estado.aulas[btn.dataset.chave] && !estado.aulas[btn.dataset.chave].bloqueado);
     btn.addEventListener("dragstart", evento => {
       const aula = estado.aulas[btn.dataset.chave];
