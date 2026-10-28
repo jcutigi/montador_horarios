@@ -207,8 +207,10 @@ function obterAvisosDescanso() {
         aulaSeguinte.aula.professores.includes(professor)
       );
       if (!professoresEmComum.length) continue;
-      if (!avisos.has(aulaSeguinte.chave)) avisos.set(aulaSeguinte.chave, new Set());
-      professoresEmComum.forEach(professor => avisos.get(aulaSeguinte.chave).add(professor));
+      for (const chave of [aulaTardia.chave, aulaSeguinte.chave]) {
+        if (!avisos.has(chave)) avisos.set(chave, new Set());
+        professoresEmComum.forEach(professor => avisos.get(chave).add(professor));
+      }
     }
   }
   return avisos;
@@ -267,7 +269,7 @@ function renderizarGrade() {
             ...[...conflito.salas].map(nome => `Sala em conflito: ${nome}`)
           ] : [];
           const detalhesDescanso = [...professoresSemDescanso].map(nome =>
-            `${nome}: descanso insuficiente após aula até 22:30; início permitido a partir das 09:30`
+            `${nome}: intervalo de descanso insuficiente entre aulas (aula até 22:30; próxima antes das 09:30)`
           );
           const professores = (aula.professores || []).join(", ");
           const salas = (aula.salas || []).join(", ");
