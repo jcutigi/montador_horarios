@@ -56,6 +56,7 @@ p { line-height: 1.45; }
 .cartao-atribuicao.arrastando { opacity: .5; cursor: grabbing; }
 .cartao-atribuicao strong { color: #14532d; font-size: .92rem; }
 .cartao-atribuicao span { color: #475569; }
+.cartao-atribuicao .editar-atribuicao { justify-self: start; padding: 4px 8px; font-size: .75rem; }
 .turma table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .86rem; }
 .turma th, .turma td { border: 1px solid #e1e7eb; padding: 0; vertical-align: stretch; }
 .turma th { background: #f1f5f9; padding: 6px 3px; }
@@ -66,6 +67,7 @@ p { line-height: 1.45; }
 .celula-aula[draggable="true"] { cursor: grab; }
 .celula-aula[draggable="true"]:active { cursor: grabbing; }
 .celula-aula.preenchida { background: #eaf3ff; }
+.celula-aula.indisponivel { background: repeating-linear-gradient(135deg, #f1f5f9, #f1f5f9 8px, #e2e8f0 8px, #e2e8f0 16px); color: #475569; }
 .celula-aula.conflito { background: #fee2e2; box-shadow: inset 0 0 0 2px #dc2626; color: #7f1d1d; }
 .celula-aula.descanso-insuficiente { background: #fef3c7; box-shadow: inset 0 0 0 2px #eab308; color: #713f12; }
 .celula-aula.conflito.descanso-insuficiente { background: #fef3c7; box-shadow: inset 0 0 0 2px #dc2626; color: #713f12; }
@@ -104,6 +106,8 @@ dialog::backdrop { background: #0f172a88; }
 .modal-topo p { margin: 0; color: #64748b; font-size: .9rem; }
 .fechar { background: transparent; color: #475569; font-size: 1.7rem; padding: 0 8px; align-self: start; }
 #formAula > label { display: grid; gap: 6px; font-weight: 600; }
+#formAula > label.opcao-bloqueio { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+#bloquearHorario { width: 17px; height: 17px; }
 #formAula select[multiple] { width: 100%; }
 #formAula .ajuda { font-weight: 400; }
 .botoes-modal { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

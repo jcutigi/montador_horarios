@@ -11,6 +11,7 @@ let estado = {
 };
 
 let chaveAulaAtual = null;
+let atribuicaoAtual = null;
 let statusDados = "Carregando dados.json...";
 
 function clonar(obj) { return JSON.parse(JSON.stringify(obj)); }
@@ -94,6 +95,47 @@ function formatarHorario(h) { return `${h.inicio}–${h.fim}`; }
 function minutos(hora) { const [h,m] = hora.split(":").map(Number); return h*60+m; }
 function intervalosSobrepoem(a,b) { return minutos(a.inicio) < minutos(b.fim) && minutos(b.inicio) < minutos(a.fim); }
 
+function professoresEquivalentes(a, b) {
+  const normalizar = nomes => (nomes || []).map(normalizarTexto).sort();
+  return JSON.stringify(normalizar(a)) === JSON.stringify(normalizar(b));
+}
+
+function obterAtribuicoesAlocadas() {
+  const alocadas = new Set();
+  const atribuicoesPorId = new Map(estado.atribuicoes.map(item => [item.id, item]));
+  const grupos = new Map();
+  Object.entries(estado.aulas).forEach(([chave, aula]) => {
+    if (aula.bloqueado) return;
+    const grupoId = aula.grupoId || chave;
+    const atual = grupos.get(grupoId);
+    if (!atual || Number(aula.indiceSegmento || 0) < Number(atual.aula.indiceSegmento || 0)) {
+      grupos.set(grupoId, {chave, aula});
+    }
+  });
+
+  const gruposSemAtribuicao = [];
+  grupos.forEach(({chave, aula}) => {
+    const atribuicao = atribuicoesPorId.get(aula.atribuicaoId);
+    if (atribuicao) alocadas.add(atribuicao.id);
+    else gruposSemAtribuicao.push({chave, aula});
+  });
+
+  gruposSemAtribuicao.forEach(({chave, aula}) => {
+    const [cursoId, turmaTexto] = chave.split("|");
+    const candidatas = estado.atribuicoes.filter(item =>
+      !alocadas.has(item.id)
+      && item.cursoId === cursoId
+      && item.semestre === Number(turmaTexto) + 1
+      && normalizarTexto(item.sigla) === normalizarTexto(aula.disciplina)
+    );
+    const correspondente = candidatas.find(item =>
+      professoresEquivalentes(item.professores, aula.professores)
+    ) || candidatas[0];
+    if (correspondente) alocadas.add(correspondente.id);
+  });
+  return alocadas;
+}
+
 function obterConflitos() {
   const conflitos = new Map();
   const registrarConflito = (chave, tipo, nomes) => {
@@ -174,6 +216,7 @@ function renderizarGrade() {
   const container = document.getElementById("gradeGeral");
   const conflitos = obterConflitos();
   const avisosDescanso = obterAvisosDescanso();
+  const atribuicoesAlocadas = obterAtribuicoesAlocadas();
   container.innerHTML = "";
   
   if (!estado.cursos.length) {
@@ -190,9 +233,6 @@ function renderizarGrade() {
     for (let t=0; t<curso.quantidade; t++) {
       const bloco = document.createElement("div");
       bloco.className = "turma";
-      const atribuicoesAlocadas = new Set(
-        Object.values(estado.aulas).map(aula => aula.atribuicaoId).filter(Boolean)
-      );
       const atribuicoes = estado.atribuicoes
         .map((item, indice) => ({item, indice}))
         .filter(({item}) => item.cursoId === curso.id && item.semestre === t + 1 && !atribuicoesAlocadas.has(item.id));
@@ -200,10 +240,11 @@ function renderizarGrade() {
       html += `<div class="atribuicoes-turma" aria-label="Atribuições do semestre ${t + 1}">
         <h5>Atribuições do semestre <span>— arraste para o horário; arraste uma aula de volta para devolver</span></h5>`;
       if (atribuicoes.length) {
-        html += `<div class="cartoes-atribuicao">${atribuicoes.map(({item}) => `<article class="cartao-atribuicao" draggable="true" data-atribuicao="${escaparHtml(item.id)}" title="Arraste para um horário">
+        html += `<div class="cartoes-atribuicao">${atribuicoes.map(({item}) => `<article class="cartao-atribuicao" draggable="true" tabindex="0" aria-label="Editar ${escaparHtml(item.sigla)}; também é possível arrastar para um horário" data-atribuicao="${escaparHtml(item.id)}" title="Clique para editar ou arraste para um horário">
             <strong>${escaparHtml(item.sigla)}</strong>
             <span>${escaparHtml(item.aulasPorSemana)} aulas por semana</span>
             <span>${escaparHtml((item.professores || []).join(", "))}</span>
+            <button type="button" class="secundario editar-atribuicao" data-editar-atribuicao="${escaparHtml(item.id)}">Editar</button>
           </article>`).join("")}</div>`;
       } else {
         html += `<p class="zona-devolucao">Arraste uma disciplina da grade para cá para devolvê-la.</p>`;
@@ -215,6 +256,7 @@ function renderizarGrade() {
         for (let d=0; d<DIAS.length; d++) {
           const chave = chaveAula(curso.id,t,d,h);
           const aula = estado.aulas[chave] || {};
+          const indisponivel = Boolean(aula.bloqueado);
           const conflito = conflitos.get(chave);
           const professoresSemDescanso = avisosDescanso.get(chave) || new Set();
           const detalhesConflito = conflito ? [
@@ -227,8 +269,8 @@ function renderizarGrade() {
           const professores = (aula.professores || []).join(", ");
           const salas = (aula.salas || []).join(", ");
           const continuacao = Boolean(aula.grupoId && aula.indiceSegmento > 0);
-          html += `<td><button class="celula-aula ${aula.disciplina || professores || salas ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""}" data-chave="${escaparHtml(chave)}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, "Clique para editar aula"].join(". "))}">
-            ${continuacao ? `<span class="detalhe">↳ continuação</span>` : (aula.disciplina?`<span class="disciplina">${escaparHtml(aula.disciplina)}</span>`:`<span class="ajuda">+ Aula</span>`)}
+          html += `<td><button class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""}" data-chave="${escaparHtml(chave)}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
+            ${indisponivel ? `<span class="disciplina">Indisponível</span>` : (continuacao ? `<span class="detalhe">↳ continuação</span>` : (aula.disciplina?`<span class="disciplina">${escaparHtml(aula.disciplina)}</span>`:`<span class="ajuda">+ Aula</span>`))}
             ${!continuacao && professores?`<span class="detalhe">${escaparHtml(professores)}</span>`:""}
             ${!continuacao && salas?`<span class="detalhe">${escaparHtml(salas)}</span>`:""}
             ${detalhesConflito.map(detalhe => `<span class="detalhe conflito-descricao">${escaparHtml(detalhe)}</span>`).join("")}
@@ -254,6 +296,22 @@ function renderizarGrade() {
       cartao.classList.add("arrastando");
     });
     cartao.addEventListener("dragend", () => cartao.classList.remove("arrastando"));
+    cartao.addEventListener("click", evento => {
+      if (evento.target.closest(".editar-atribuicao")) return;
+      abrirModalAtribuicao(cartao.dataset.atribuicao);
+    });
+    cartao.addEventListener("keydown", evento => {
+      if (evento.key === "Enter" || evento.key === " ") {
+        evento.preventDefault();
+        abrirModalAtribuicao(cartao.dataset.atribuicao);
+      }
+    });
+  });
+  container.querySelectorAll("[data-editar-atribuicao]").forEach(botao => {
+    botao.addEventListener("click", evento => {
+      evento.stopPropagation();
+      abrirModalAtribuicao(botao.dataset.editarAtribuicao);
+    });
   });
   container.querySelectorAll(".atribuicoes-turma").forEach(zona => {
     zona.addEventListener("dragover", evento => {
@@ -272,7 +330,7 @@ function renderizarGrade() {
   });
   container.querySelectorAll("[data-chave]").forEach(btn => {
     btn.addEventListener("click", () => abrirModal(btn.dataset.chave));
-    btn.draggable = Boolean(estado.aulas[btn.dataset.chave]);
+    btn.draggable = Boolean(estado.aulas[btn.dataset.chave] && !estado.aulas[btn.dataset.chave].bloqueado);
     btn.addEventListener("dragstart", evento => {
       const aula = estado.aulas[btn.dataset.chave];
       evento.dataTransfer.setData("text/plain", JSON.stringify({
@@ -364,7 +422,10 @@ function colocarAtribuicaoNoHorario(atribuicaoId, chave) {
     chaveAula(cursoId, turma, dia, inicio + offset)
   );
   if (chavesDestino.some(chaveDestino => estado.aulas[chaveDestino])) {
-    alert("Um dos períodos necessários já contém uma aula. Escolha um horário livre.");
+    const temBloqueio = chavesDestino.some(chaveDestino => estado.aulas[chaveDestino]?.bloqueado);
+    alert(temBloqueio
+      ? "Um dos períodos necessários está marcado como indisponível."
+      : "Um dos períodos necessários já contém uma aula. Escolha um horário livre.");
     return;
   }
 
@@ -414,7 +475,12 @@ function moverAulaNoHorario(dados, chaveDestino) {
     chaveAula(cursoId, Number(turma), diaDestino, inicioDestino + indice)
   );
   if (chavesDestino.some(chave => estado.aulas[chave] && !chavesOrigem.has(chave))) {
-    alert("Um dos períodos necessários já contém outra aula. Escolha um horário livre.");
+    const temBloqueio = chavesDestino.some(chave =>
+      estado.aulas[chave]?.bloqueado && !chavesOrigem.has(chave)
+    );
+    alert(temBloqueio
+      ? "Um dos períodos necessários está marcado como indisponível."
+      : "Um dos períodos necessários já contém outra aula. Escolha um horário livre.");
     return;
   }
 
@@ -504,7 +570,10 @@ function abrirModal(chave) {
   chaveAulaAtual = chave;
   const [cursoId,t,d,h] = chave.split("|");
   const curso = buscarCurso(cursoId);
-  let aula = estado.aulas[chave] || {disciplina:"",professores:[],salas:[]};
+  const aulaOriginal = estado.aulas[chave];
+  let aula = aulaOriginal?.bloqueado
+    ? {disciplina:"",professores:[],salas:[]}
+    : aulaOriginal || {disciplina:"",professores:[],salas:[]};
   if (aula.grupoId) {
     const primeira = Object.values(estado.aulas).find(item => item.grupoId === aula.grupoId && item.indiceSegmento === 0);
     if (primeira) aula = primeira;
@@ -518,8 +587,34 @@ function abrirModal(chave) {
   document.getElementById("disciplinaAula").value = aula.disciplina || "";
   preencherSelect("professoresAula",estado.professores,aula.professores || []);
   preencherSelect("salasAula",estado.salas,aula.salas || []);
+  const bloqueio = document.getElementById("bloquearHorario");
+  const aulaOcupada = Boolean(aulaOriginal && !aulaOriginal.bloqueado && (
+    aulaOriginal.disciplina || aulaOriginal.professores?.length || aulaOriginal.salas?.length
+  ));
+  bloqueio.checked = Boolean(aulaOriginal?.bloqueado);
+  bloqueio.disabled = aulaOcupada;
+  document.getElementById("ajudaBloqueio").textContent = aulaOcupada
+    ? "Remova a aula antes de marcar este horário como indisponível."
+    : "";
   document.getElementById("erroAula").textContent = "";
   document.getElementById("modalAula").showModal();
+}
+
+function abrirModalAtribuicao(id) {
+  const atribuicao = estado.atribuicoes.find(item => item.id === id);
+  if (!atribuicao) {
+    alert("Não foi possível encontrar a disciplina. Atualize a página e tente novamente.");
+    return;
+  }
+  atribuicaoAtual = id;
+  const curso = buscarCurso(atribuicao.cursoId);
+  document.getElementById("detalheAtribuicaoModal").textContent =
+    `${curso?.nome || atribuicao.cursoId} — ${atribuicao.semestre}º semestre`;
+  document.getElementById("siglaAtribuicao").value = atribuicao.sigla;
+  document.getElementById("aulasPorSemanaAtribuicao").value = atribuicao.aulasPorSemana;
+  preencherSelect("professoresAtribuicao", estado.professores, atribuicao.professores || []);
+  document.getElementById("erroAtribuicao").textContent = "";
+  document.getElementById("modalAtribuicao").showModal();
 }
 
 function preencherSelect(id, itens, selecionados) {
@@ -574,6 +669,7 @@ document.getElementById("formAula").addEventListener("submit", e => {
   const professores = valoresSelecionados("professoresAula");
   const salas = valoresSelecionados("salasAula");
   const duracao = Number(document.getElementById("duracaoAula").value);
+  const bloquear = document.getElementById("bloquearHorario").checked;
   const chavesAntigas = new Set();
   const aulaAntiga = estado.aulas[chaveAulaAtual];
   if (aulaAntiga?.grupoId) {
@@ -581,7 +677,14 @@ document.getElementById("formAula").addEventListener("submit", e => {
   } else {
     chavesAntigas.add(chaveAulaAtual);
   }
-  if (!disciplina && !professores.length && !salas.length) {
+  if (bloquear) {
+    if (disciplina || professores.length || salas.length) {
+      document.getElementById("erroAula").textContent = "Remova os dados da aula antes de marcar o horário como indisponível.";
+      return;
+    }
+    chavesAntigas.forEach(k => delete estado.aulas[k]);
+    estado.aulas[chaveAulaAtual] = {bloqueado:true};
+  } else if (!disciplina && !professores.length && !salas.length) {
     chavesAntigas.forEach(k => delete estado.aulas[k]);
   } else {
     if (inicio + duracao > curso.horarios.length) {
@@ -592,7 +695,9 @@ document.getElementById("formAula").addEventListener("submit", e => {
       const k = chaveAula(cursoId,turma,dia,inicio+offset);
       const existente = estado.aulas[k];
       if (existente && !chavesAntigas.has(k)) {
-        document.getElementById("erroAula").textContent = "Um dos períodos seguintes já contém outra aula.";
+        document.getElementById("erroAula").textContent = existente.bloqueado
+          ? "Um dos períodos necessários está marcado como indisponível."
+          : "Um dos períodos seguintes já contém outra aula.";
         return;
       }
     }
@@ -600,7 +705,8 @@ document.getElementById("formAula").addEventListener("submit", e => {
     const grupoId = `aula-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
     for (let offset=0; offset<duracao; offset++) {
       estado.aulas[chaveAula(cursoId,turma,dia,inicio+offset)] = {
-        disciplina, professores:[...professores], salas:[...salas], grupoId, indiceSegmento:offset
+        disciplina, professores:[...professores], salas:[...salas], grupoId, indiceSegmento:offset,
+        ...(aulaAntiga?.atribuicaoId ? {atribuicaoId:aulaAntiga.atribuicaoId} : {})
       };
     }
   }
@@ -621,6 +727,55 @@ document.getElementById("limparAulaBtn").addEventListener("click", () => {
     delete estado.aulas[chaveAulaAtual];
   }
   fecharModal(); 
+  salvarEstado();
+  renderizarGrade();
+});
+
+document.getElementById("formAtribuicao").addEventListener("submit", e => {
+  e.preventDefault();
+  const atribuicao = estado.atribuicoes.find(item => item.id === atribuicaoAtual);
+  if (!atribuicao) {
+    document.getElementById("erroAtribuicao").textContent = "Não foi possível encontrar a disciplina. Feche e tente novamente.";
+    return;
+  }
+  const sigla = document.getElementById("siglaAtribuicao").value.trim();
+  const aulasPorSemana = Number(document.getElementById("aulasPorSemanaAtribuicao").value);
+  const professores = valoresSelecionados("professoresAtribuicao");
+  if (!sigla) {
+    document.getElementById("erroAtribuicao").textContent = "Informe o nome ou a sigla da disciplina.";
+    return;
+  }
+  if (!Number.isInteger(aulasPorSemana) || aulasPorSemana < 1) {
+    document.getElementById("erroAtribuicao").textContent = "A quantidade de aulas por semana deve ser um inteiro positivo.";
+    return;
+  }
+  if (!professores.length) {
+    document.getElementById("erroAtribuicao").textContent = "Selecione ao menos um professor.";
+    return;
+  }
+  atribuicao.sigla = sigla;
+  atribuicao.aulasPorSemana = aulasPorSemana;
+  atribuicao.professores = professores;
+  document.getElementById("modalAtribuicao").close();
+  salvarEstado();
+  renderizarGrade();
+});
+
+function fecharModalAtribuicao() {
+  document.getElementById("modalAtribuicao").close();
+  atribuicaoAtual = null;
+}
+
+document.getElementById("fecharAtribuicaoModal").addEventListener("click", fecharModalAtribuicao);
+document.getElementById("cancelarAtribuicaoModal").addEventListener("click", fecharModalAtribuicao);
+
+document.getElementById("limparHorariosBtn").addEventListener("click", () => {
+  if (!Object.keys(estado.aulas).length) {
+    alert("A grade já está vazia.");
+    return;
+  }
+  if (!confirm("Limpar todos os horários? As disciplinas, os cadastros e as marcações de indisponibilidade serão removidos da grade.")) return;
+  estado.aulas = {};
   salvarEstado();
   renderizarGrade();
 });
