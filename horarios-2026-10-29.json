@@ -1,0 +1,2224 @@
+{
+  "formato": "montador-horarios",
+  "versao": 1,
+  "exportadoEm": "2026-10-29T11:10:26.597Z",
+  "dados": {
+    "professores": [
+      "Aline",
+      "Bianchi",
+      "Carlão",
+      "Célia",
+      "Danilo",
+      "Eloize",
+      "Fábio",
+      "João",
+      "Jorge",
+      "Lucas",
+      "Luiz",
+      "Mateus",
+      "Pablo",
+      "Pedro",
+      "Ramos",
+      "Salina",
+      "Santinho",
+      "Sérgio",
+      "Silvana",
+      "Tiago"
+    ],
+    "salas": [
+      "A205 (Hangar)",
+      "C102",
+      "C103",
+      "C104",
+      "C105",
+      "C106",
+      "C107",
+      "C209",
+      "Sala de Aula"
+    ],
+    "cursos": [
+      {
+        "id": "BES",
+        "nome": "BES",
+        "duracao": 50,
+        "quantidade": 4,
+        "horarios": [
+          {
+            "inicio": "08:00",
+            "fim": "09:40"
+          },
+          {
+            "inicio": "09:50",
+            "fim": "11:30"
+          },
+          {
+            "inicio": "19:00",
+            "fim": "20:40"
+          },
+          {
+            "inicio": "20:50",
+            "fim": "22:30"
+          }
+        ]
+      },
+      {
+        "id": "ADS",
+        "nome": "ADS",
+        "duracao": 50,
+        "quantidade": 3,
+        "horarios": [
+          {
+            "inicio": "19:00",
+            "fim": "20:40"
+          },
+          {
+            "inicio": "20:50",
+            "fim": "22:30"
+          }
+        ]
+      },
+      {
+        "id": "TII",
+        "nome": "TII",
+        "duracao": 45,
+        "quantidade": 3,
+        "horarios": [
+          {
+            "inicio": "07:05",
+            "fim": "08:35"
+          },
+          {
+            "inicio": "08:50",
+            "fim": "10:20"
+          },
+          {
+            "inicio": "10:35",
+            "fim": "12:05"
+          },
+          {
+            "inicio": "13:30",
+            "fim": "15:00"
+          },
+          {
+            "inicio": "15:20",
+            "fim": "16:50"
+          }
+        ]
+      },
+      {
+        "id": "CORINGA",
+        "nome": "Coringa",
+        "duracao": 50,
+        "quantidade": 2,
+        "horarios": [
+          {
+            "inicio": "08:00",
+            "fim": "09:40"
+          },
+          {
+            "inicio": "09:50",
+            "fim": "11:30"
+          },
+          {
+            "inicio": "19:00",
+            "fim": "20:40"
+          },
+          {
+            "inicio": "20:50",
+            "fim": "22:30"
+          }
+        ]
+      }
+    ],
+    "aulas": {
+      "BES|0|4|0": {
+        "disciplina": "SCLPPSW",
+        "professores": [
+          "Jorge"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197353413-r1h0dv",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-20-puh2hd"
+      },
+      "BES|0|4|1": {
+        "disciplina": "SCLPPSW",
+        "professores": [
+          "Jorge"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197353413-r1h0dv",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-20-puh2hd"
+      },
+      "BES|0|3|0": {
+        "disciplina": "SCLMATC",
+        "professores": [
+          "Santinho"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197357615-nroooc",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-23-n0uoei"
+      },
+      "BES|0|3|1": {
+        "disciplina": "SCLMATC",
+        "professores": [
+          "Santinho"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197357615-nroooc",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-23-n0uoei"
+      },
+      "BES|0|1|0": {
+        "disciplina": "SCLING1",
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197359044-0fbwlp",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-24-lab2k6"
+      },
+      "BES|1|4|0": {
+        "disciplina": "SCLSINF",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197491950-caejn8",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-30-sew2af"
+      },
+      "BES|1|4|1": {
+        "disciplina": "SCLRQSW",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197493310-b4i90j",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-28-sq1gdn"
+      },
+      "BES|1|1|0": {
+        "disciplina": "SCLPROO",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C102"
+        ],
+        "grupoId": "aula-1793197508906-er0unc",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-27-ztlped"
+      },
+      "BES|1|1|1": {
+        "disciplina": "SCLPROO",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C102"
+        ],
+        "grupoId": "aula-1793197508906-er0unc",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-27-ztlped"
+      },
+      "BES|1|3|0": {
+        "disciplina": "SCLESDD",
+        "professores": [
+          "Pablo"
+        ],
+        "salas": [
+          "C107"
+        ],
+        "grupoId": "aula-1793197515011-s8bhgt",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-25-ny7ga0"
+      },
+      "BES|1|3|1": {
+        "disciplina": "SCLESDD",
+        "professores": [
+          "Pablo"
+        ],
+        "salas": [
+          "C107"
+        ],
+        "grupoId": "aula-1793197515011-s8bhgt",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-25-ny7ga0"
+      },
+      "BES|2|0|0": {
+        "disciplina": "SCLRCO1",
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197619965-57vqsl",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-34-0bhpv2"
+      },
+      "BES|2|0|1": {
+        "disciplina": "SCLRCO1",
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197619965-57vqsl",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-34-0bhpv2"
+      },
+      "BES|2|4|0": {
+        "disciplina": "SCLAMMD",
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197635283-iowa4r",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-35-nitx30"
+      },
+      "BES|2|4|1": {
+        "disciplina": "SCLAMMD",
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197635283-iowa4r",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-35-nitx30"
+      },
+      "BES|3|4|2": {
+        "disciplina": "SCLCOSS",
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197673493-0k9884",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-37-16l4qd"
+      },
+      "ADS|1|0|0": {
+        "disciplina": "SCLAXD1",
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C102"
+        ],
+        "grupoId": "aula-1793197746314-gs0dx8",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-7-nii028"
+      },
+      "ADS|1|0|1": {
+        "disciplina": "SCLAXD1",
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C102"
+        ],
+        "grupoId": "aula-1793197746314-gs0dx8",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-7-nii028"
+      },
+      "ADS|0|0|0": {
+        "disciplina": "SCLAPR2",
+        "professores": [
+          "Bianchi",
+          "Eloize"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793197763042-bd8i6o",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-1-91f67e"
+      },
+      "ADS|0|0|1": {
+        "disciplina": "SCLIHCO",
+        "professores": [
+          "Eloize"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197772714-zkr15h",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-3-dzj79v"
+      },
+      "ADS|0|1|1": {
+        "disciplina": "SCLING2",
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197776020-p4e5wp",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-2-s2mrzz"
+      },
+      "ADS|0|1|0": {
+        "disciplina": "SCLPEST",
+        "professores": [
+          "Santinho"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197805843-1rxss6",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-4-92f5sh"
+      },
+      "ADS|0|4|0": {
+        "disciplina": "SCLAPR2",
+        "professores": [
+          "Bianchi",
+          "Eloize"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793197761804-nrb8rp",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-0-tgjuvc"
+      },
+      "ADS|0|4|1": {
+        "disciplina": "SCLAPR2",
+        "professores": [
+          "Bianchi",
+          "Eloize"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793197761804-nrb8rp",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-0-tgjuvc"
+      },
+      "ADS|1|4|0": {
+        "disciplina": "SCLAPOO",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197830291-0y5349",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-8-acidjl"
+      },
+      "ADS|1|4|1": {
+        "disciplina": "SCLAPOO",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197830291-0y5349",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-8-acidjl"
+      },
+      "ADS|2|3|0": {
+        "disciplina": "SCLAXD3",
+        "professores": [
+          "João"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197854347-19evv0",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-12-cjsvtd"
+      },
+      "ADS|2|3|1": {
+        "disciplina": "SCLAXD3",
+        "professores": [
+          "João"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197854347-19evv0",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-12-cjsvtd"
+      },
+      "ADS|2|2|0": {
+        "disciplina": "SCLTPCO",
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "C106"
+        ],
+        "grupoId": "aula-1793197880871-vpfoko",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-17-lshvdf"
+      },
+      "ADS|2|2|1": {
+        "disciplina": "SCLTPCO",
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "C106"
+        ],
+        "grupoId": "aula-1793197880871-vpfoko",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-17-lshvdf"
+      },
+      "ADS|2|4|1": {
+        "disciplina": "SCLCOSS",
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197957835-6aar5q",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-15-7n6kek"
+      },
+      "ADS|2|4|0": {
+        "disciplina": "SCLAXD3",
+        "professores": [
+          "João"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793197966906-lm4vj2",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-13-wmhhwo"
+      },
+      "ADS|2|0|0": {
+        "disciplina": "SCLASEG",
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197968186-civ58j",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-14-lm1iag"
+      },
+      "ADS|2|0|1": {
+        "disciplina": "SCLASEG",
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197968186-civ58j",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-14-lm1iag"
+      },
+      "ADS|2|1|0": {
+        "disciplina": "SCLEMPC",
+        "professores": [
+          "Salina",
+          "Sérgio"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793197997590-jlg02a",
+        "indiceSegmento": 0
+      },
+      "ADS|2|1|1": {
+        "disciplina": "SCLEMPC",
+        "professores": [
+          "Salina",
+          "Sérgio"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793197997590-jlg02a",
+        "indiceSegmento": 1
+      },
+      "ADS|1|1|0": {
+        "disciplina": "SCLPRW3",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197828123-utvyu1",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-10-iqhe6l"
+      },
+      "ADS|1|1|1": {
+        "disciplina": "SCLPRW3",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793197828123-utvyu1",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-10-iqhe6l"
+      },
+      "ADS|1|3|0": {
+        "disciplina": "SCLBDD2",
+        "professores": [
+          "Mateus",
+          "Silvana"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198048450-gjlpw2",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-9-5uldv4"
+      },
+      "ADS|1|3|1": {
+        "disciplina": "SCLBDD2",
+        "professores": [
+          "Mateus",
+          "Silvana"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198048450-gjlpw2",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-9-5uldv4"
+      },
+      "ADS|1|2|0": {
+        "disciplina": "SCLRCO1",
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198054681-f8f660",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-11-adqgva"
+      },
+      "ADS|1|2|1": {
+        "disciplina": "SCLRCO1",
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198054681-f8f660",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-11-adqgva"
+      },
+      "ADS|0|3|0": {
+        "disciplina": "SCLPRW1",
+        "professores": [
+          "Tiago",
+          "Jorge"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793197819506-oyy6b1",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-5-4wslce"
+      },
+      "ADS|0|3|1": {
+        "disciplina": "SCLPRW1",
+        "professores": [
+          "Tiago",
+          "Jorge"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793197819506-oyy6b1",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-5-4wslce"
+      },
+      "ADS|0|2|0": {
+        "disciplina": "SCLSOPE",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198075681-ff1u2x",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207616-6-4qufvk"
+      },
+      "ADS|0|2|1": {
+        "disciplina": "SCLSOPE",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198075681-ff1u2x",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207616-6-4qufvk"
+      },
+      "BES|1|0|0": {
+        "disciplina": "SCLPRW2",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C107"
+        ],
+        "grupoId": "aula-1793198109074-jsdm0x",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-29-1uvzii"
+      },
+      "BES|1|0|1": {
+        "disciplina": "SCLPRW2",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C107"
+        ],
+        "grupoId": "aula-1793198109074-jsdm0x",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-29-1uvzii"
+      },
+      "TII|1|1|3": {
+        "disciplina": "SCLDSW2",
+        "professores": [
+          "Danilo",
+          "Tiago"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793198146048-j05f72",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-46-pdesq9"
+      },
+      "TII|1|1|4": {
+        "disciplina": "SCLDSW2",
+        "professores": [
+          "Danilo",
+          "Tiago"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793198146048-j05f72",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-46-pdesq9"
+      },
+      "TII|1|3|3": {
+        "disciplina": "SCLPRBD",
+        "professores": [
+          "Salina",
+          "Fábio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198158746-gg73k5",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-48-6boxjy"
+      },
+      "TII|1|3|4": {
+        "disciplina": "SCLPRBD",
+        "professores": [
+          "Salina",
+          "Fábio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198158746-gg73k5",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-48-6boxjy"
+      },
+      "TII|2|4|0": {
+        "disciplina": "SCLPRIN",
+        "professores": [
+          "Sérgio",
+          "Salina"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793198208937-eaohai",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-50-83sis2"
+      },
+      "TII|2|4|1": {
+        "disciplina": "SCLPRIN",
+        "professores": [
+          "Sérgio",
+          "Salina"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793198208937-eaohai",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-50-83sis2"
+      },
+      "BES|0|0|2": {
+        "bloqueado": true
+      },
+      "BES|0|0|3": {
+        "bloqueado": true
+      },
+      "BES|0|1|2": {
+        "bloqueado": true
+      },
+      "BES|0|1|3": {
+        "bloqueado": true
+      },
+      "BES|0|2|2": {
+        "bloqueado": true
+      },
+      "BES|0|2|3": {
+        "bloqueado": true
+      },
+      "BES|0|3|2": {
+        "bloqueado": true
+      },
+      "BES|0|3|3": {
+        "bloqueado": true
+      },
+      "BES|0|4|2": {
+        "bloqueado": true
+      },
+      "BES|0|4|3": {
+        "bloqueado": true
+      },
+      "BES|1|0|2": {
+        "bloqueado": true
+      },
+      "BES|1|0|3": {
+        "bloqueado": true
+      },
+      "BES|1|1|3": {
+        "bloqueado": true
+      },
+      "BES|1|1|2": {
+        "bloqueado": true
+      },
+      "BES|1|2|2": {
+        "bloqueado": true
+      },
+      "BES|1|2|3": {
+        "bloqueado": true
+      },
+      "BES|1|3|3": {
+        "bloqueado": true
+      },
+      "BES|1|3|2": {
+        "bloqueado": true
+      },
+      "BES|1|4|2": {
+        "bloqueado": true
+      },
+      "BES|1|4|3": {
+        "bloqueado": true
+      },
+      "BES|2|0|2": {
+        "bloqueado": true
+      },
+      "BES|2|0|3": {
+        "bloqueado": true
+      },
+      "BES|2|1|3": {
+        "bloqueado": true
+      },
+      "BES|2|1|2": {
+        "bloqueado": true
+      },
+      "BES|2|2|2": {
+        "bloqueado": true
+      },
+      "BES|2|2|3": {
+        "bloqueado": true
+      },
+      "BES|2|3|3": {
+        "bloqueado": true
+      },
+      "BES|2|3|2": {
+        "bloqueado": true
+      },
+      "BES|2|4|2": {
+        "bloqueado": true
+      },
+      "BES|2|4|3": {
+        "bloqueado": true
+      },
+      "BES|3|0|0": {
+        "bloqueado": true
+      },
+      "BES|3|0|1": {
+        "bloqueado": true
+      },
+      "BES|3|1|1": {
+        "bloqueado": true
+      },
+      "BES|3|1|0": {
+        "bloqueado": true
+      },
+      "BES|3|2|0": {
+        "bloqueado": true
+      },
+      "BES|3|2|1": {
+        "bloqueado": true
+      },
+      "BES|3|3|1": {
+        "bloqueado": true
+      },
+      "BES|3|3|0": {
+        "bloqueado": true
+      },
+      "BES|3|4|0": {
+        "bloqueado": true
+      },
+      "BES|3|4|1": {
+        "bloqueado": true
+      },
+      "TII|0|0|1": {
+        "disciplina": "SCLDSW1",
+        "professores": [
+          "Jorge",
+          "Fábio"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793198095369-g6kqlu",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-43-j8soap"
+      },
+      "TII|0|0|2": {
+        "disciplina": "SCLDSW1",
+        "professores": [
+          "Jorge",
+          "Fábio"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793198095369-g6kqlu",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-43-j8soap"
+      },
+      "TII|0|2|0": {
+        "disciplina": "SCLILOG",
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "C105"
+        ],
+        "grupoId": "aula-1793198132946-umu11s",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-44-sjt7u7"
+      },
+      "TII|0|1|1": {
+        "disciplina": "SCLALGP",
+        "professores": [
+          "João",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793270713514-a2mmsu",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-42-uv9rsh"
+      },
+      "TII|0|1|2": {
+        "disciplina": "SCLALGP",
+        "professores": [
+          "João",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ],
+        "grupoId": "aula-1793270713514-a2mmsu",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-42-uv9rsh"
+      },
+      "TII|0|0|3": {
+        "bloqueado": true
+      },
+      "TII|0|0|4": {
+        "bloqueado": true
+      },
+      "TII|0|2|3": {
+        "bloqueado": true
+      },
+      "TII|0|2|4": {
+        "bloqueado": true
+      },
+      "TII|0|4|3": {
+        "bloqueado": true
+      },
+      "TII|0|4|4": {
+        "bloqueado": true
+      },
+      "TII|1|0|3": {
+        "bloqueado": true
+      },
+      "TII|1|0|4": {
+        "bloqueado": true
+      },
+      "TII|1|2|3": {
+        "bloqueado": true
+      },
+      "TII|1|2|4": {
+        "bloqueado": true
+      },
+      "TII|1|4|3": {
+        "bloqueado": true
+      },
+      "TII|1|4|4": {
+        "bloqueado": true
+      },
+      "TII|2|0|3": {
+        "bloqueado": true
+      },
+      "TII|2|0|4": {
+        "bloqueado": true
+      },
+      "TII|2|1|4": {
+        "bloqueado": true
+      },
+      "TII|2|1|3": {
+        "bloqueado": true
+      },
+      "TII|2|2|3": {
+        "bloqueado": true
+      },
+      "TII|2|2|4": {
+        "bloqueado": true
+      },
+      "TII|2|3|4": {
+        "bloqueado": true
+      },
+      "TII|2|3|3": {
+        "bloqueado": true
+      },
+      "TII|2|4|3": {
+        "bloqueado": true
+      },
+      "TII|2|4|4": {
+        "bloqueado": true
+      },
+      "TII|1|0|0": {
+        "disciplina": "SCLFESO",
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198148661-7hkupk",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-47-0jcfmh"
+      },
+      "TII|0|3|0": {
+        "disciplina": "SCLPLCM",
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793271467096-wy1oqw",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-45-cgx2co"
+      },
+      "TII|1|1|0": {
+        "disciplina": "SCLINTI",
+        "professores": [
+          "Pedro",
+          "Luiz"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793271447006-vi6unb",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-49-w7ophi"
+      },
+      "TII|1|1|1": {
+        "disciplina": "SCLINTI",
+        "professores": [
+          "Pedro",
+          "Luiz"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ],
+        "grupoId": "aula-1793271447006-vi6unb",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-49-w7ophi"
+      },
+      "TII|2|3|1": {
+        "disciplina": "SCLTOII",
+        "professores": [
+          "Ramos",
+          "Sérgio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198205935-g6n2hb",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-51-3n3aj2"
+      },
+      "TII|2|3|2": {
+        "disciplina": "SCLTOII",
+        "professores": [
+          "Ramos",
+          "Sérgio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ],
+        "grupoId": "aula-1793198205935-g6n2hb",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-51-3n3aj2"
+      },
+      "TII|2|1|2": {
+        "disciplina": "SCLINSE",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198197703-164rl0",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-52-acedfw"
+      },
+      "BES|0|1|1": {
+        "disciplina": "SCLARCO",
+        "professores": [
+          "Salina"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793198343818-3sve2e",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-22-81l29c"
+      },
+      "BES|0|2|1": {
+        "disciplina": "SCLIWEB",
+        "professores": [
+          "Luiz",
+          "Carlão"
+        ],
+        "salas": [
+          "C104"
+        ],
+        "grupoId": "aula-1793271630389-93zqrg",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-21-v7j0js"
+      },
+      "BES|2|2|0": {
+        "disciplina": "SCLPRDM",
+        "professores": [
+          "Pedro"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197618004-78t3j1",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-33-sxzutp"
+      },
+      "BES|2|2|1": {
+        "disciplina": "SCLPRDM",
+        "professores": [
+          "Pedro"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793197618004-78t3j1",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-33-sxzutp"
+      },
+      "BES|2|3|0": {
+        "disciplina": "SCLVVTS",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271648439-s55777",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-31-fsx6tu"
+      },
+      "BES|2|3|1": {
+        "disciplina": "SCLVVTS",
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271648439-s55777",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-31-fsx6tu"
+      },
+      "BES|2|1|0": {
+        "disciplina": "SCLMPQC",
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ],
+        "grupoId": "aula-1793271674082-wb9y2p",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-36-y9qip9"
+      },
+      "BES|2|1|1": {
+        "disciplina": "SCLGCSW",
+        "professores": [
+          "Tiago"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271675577-2p71nd",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-32-55hjkd"
+      },
+      "BES|1|2|0": {
+        "disciplina": "SCLBDD1",
+        "professores": [
+          "Fábio",
+          "Mateus"
+        ],
+        "salas": [
+          "C102",
+          "C107"
+        ],
+        "grupoId": "aula-1793271798115-fwqrv6",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-26-ggs6fd"
+      },
+      "BES|1|2|1": {
+        "disciplina": "SCLBDD1",
+        "professores": [
+          "Fábio",
+          "Mateus"
+        ],
+        "salas": [
+          "C102",
+          "C107"
+        ],
+        "grupoId": "aula-1793271798115-fwqrv6",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-26-ggs6fd"
+      },
+      "BES|3|1|2": {
+        "disciplina": "SCLASEG",
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271821496-aaup1k",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-38-dsk0tn"
+      },
+      "BES|3|1|3": {
+        "disciplina": "SCLASEG",
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271821496-aaup1k",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-38-dsk0tn"
+      },
+      "BES|3|3|2": {
+        "disciplina": "SCLTCDD",
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271833705-g15853",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-40-gp3kzt"
+      },
+      "BES|3|3|3": {
+        "disciplina": "SCLTCDD",
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271833705-g15853",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-40-gp3kzt"
+      },
+      "BES|3|0|2": {
+        "disciplina": "SCLAXB3",
+        "professores": [
+          "Fábio"
+        ],
+        "salas": [
+          "C106"
+        ],
+        "grupoId": "aula-1793271861691-ifqk3e",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-41-aaqwpz"
+      },
+      "BES|3|0|3": {
+        "disciplina": "SCLAXB3",
+        "professores": [
+          "Fábio"
+        ],
+        "salas": [
+          "C106"
+        ],
+        "grupoId": "aula-1793271861691-ifqk3e",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-41-aaqwpz"
+      },
+      "BES|3|2|2": {
+        "disciplina": "SCLDMDM",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271889775-je28km",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-39-6vbybs"
+      },
+      "BES|3|2|3": {
+        "disciplina": "SCLDMDM",
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C209"
+        ],
+        "grupoId": "aula-1793271889775-je28km",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-39-6vbybs"
+      },
+      "BES|0|0|0": {
+        "disciplina": "SCLAPR1",
+        "professores": [
+          "Eloize",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C106"
+        ],
+        "grupoId": "aula-1793272139205-ieqo2s",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-18-vyu60c"
+      },
+      "BES|0|0|1": {
+        "disciplina": "SCLAPR1",
+        "professores": [
+          "Eloize",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C106"
+        ],
+        "grupoId": "aula-1793272139205-ieqo2s",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793272207617-18-vyu60c"
+      },
+      "BES|0|2|0": {
+        "disciplina": "SCLAPR1",
+        "professores": [
+          "Eloize",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C106"
+        ],
+        "grupoId": "aula-1793272144743-mdon81",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793272207617-19-izoeab"
+      }
+    },
+    "atribuicoes": [
+      {
+        "id": "atribuicao-1793272207616-0-tgjuvc",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLAPR2",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Bianchi",
+          "Eloize"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-1-91f67e",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLAPR2",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Bianchi",
+          "Eloize"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-2-s2mrzz",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLING2",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-3-dzj79v",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLIHCO",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Eloize"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-4-92f5sh",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLPEST",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Santinho"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-5-4wslce",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLPRW1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Tiago",
+          "Jorge"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-6-4qufvk",
+        "cursoId": "ADS",
+        "semestre": 1,
+        "sigla": "SCLSOPE",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-7-nii028",
+        "cursoId": "ADS",
+        "semestre": 2,
+        "sigla": "SCLAXD1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C102"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-8-acidjl",
+        "cursoId": "ADS",
+        "semestre": 2,
+        "sigla": "SCLAPOO",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-9-5uldv4",
+        "cursoId": "ADS",
+        "semestre": 2,
+        "sigla": "SCLBDD2",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Mateus",
+          "Silvana"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-10-iqhe6l",
+        "cursoId": "ADS",
+        "semestre": 2,
+        "sigla": "SCLPRW3",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-11-adqgva",
+        "cursoId": "ADS",
+        "semestre": 2,
+        "sigla": "SCLRCO1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-12-cjsvtd",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLAXD3",
+        "aulasPorSemana": 4,
+        "professores": [
+          "João"
+        ],
+        "salas": [
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-13-wmhhwo",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLAXD3",
+        "aulasPorSemana": 2,
+        "professores": [
+          "João"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-14-lm1iag",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLASEG",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207616-15-7n6kek",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLCOSS",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-16-icx7dj",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLEMPC",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Salina",
+          "Sérgio"
+        ],
+        "salas": [
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-17-lshvdf",
+        "cursoId": "ADS",
+        "semestre": 3,
+        "sigla": "SCLTPCO",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-18-vyu60c",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Eloize",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-19-izoeab",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Eloize",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-20-puh2hd",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLPPSW",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Jorge"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-21-v7j0js",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLIWEB",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Luiz",
+          "Carlão"
+        ],
+        "salas": [
+          "C104"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-22-81l29c",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLARCO",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Salina"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-23-n0uoei",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLMATC",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Santinho"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-24-lab2k6",
+        "cursoId": "BES",
+        "semestre": 1,
+        "sigla": "SCLING1",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-25-ny7ga0",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLESDD",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Pablo"
+        ],
+        "salas": [
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-26-ggs6fd",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLBDD1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Fábio",
+          "Mateus"
+        ],
+        "salas": [
+          "C102",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-27-ztlped",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLPROO",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C102"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-28-sq1gdn",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLRQSW",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-29-1uvzii",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLPRW2",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-30-sew2af",
+        "cursoId": "BES",
+        "semestre": 2,
+        "sigla": "SCLSINF",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-31-fsx6tu",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLVVTS",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Lucas"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-32-55hjkd",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLGCSW",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Tiago"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-33-sxzutp",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLPRDM",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Pedro"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-34-0bhpv2",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLRCO1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Luiz"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-35-nitx30",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLAMMD",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Ramos"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-36-y9qip9",
+        "cursoId": "BES",
+        "semestre": 3,
+        "sigla": "SCLMPQC",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-37-16l4qd",
+        "cursoId": "BES",
+        "semestre": 4,
+        "sigla": "SCLCOSS",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Mateus"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-38-dsk0tn",
+        "cursoId": "BES",
+        "semestre": 4,
+        "sigla": "SCLASEG",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Danilo"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-39-6vbybs",
+        "cursoId": "BES",
+        "semestre": 4,
+        "sigla": "SCLDMDM",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Carlão"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-40-gp3kzt",
+        "cursoId": "BES",
+        "semestre": 4,
+        "sigla": "SCLTCDD",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "C209"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-41-aaqwpz",
+        "cursoId": "BES",
+        "semestre": 4,
+        "sigla": "SCLAXB3",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Fábio"
+        ],
+        "salas": [
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-42-uv9rsh",
+        "cursoId": "TII",
+        "semestre": 1,
+        "sigla": "SCLALGP",
+        "aulasPorSemana": 4,
+        "professores": [
+          "João",
+          "Silvana"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-43-j8soap",
+        "cursoId": "TII",
+        "semestre": 1,
+        "sigla": "SCLDSW1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Jorge",
+          "Fábio"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-44-sjt7u7",
+        "cursoId": "TII",
+        "semestre": 1,
+        "sigla": "SCLILOG",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-45-cgx2co",
+        "cursoId": "TII",
+        "semestre": 1,
+        "sigla": "SCLPLCM",
+        "aulasPorSemana": 1,
+        "professores": [
+          "Aline"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-46-pdesq9",
+        "cursoId": "TII",
+        "semestre": 2,
+        "sigla": "SCLDSW2",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Danilo",
+          "Tiago"
+        ],
+        "salas": [
+          "C104",
+          "C107"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-47-0jcfmh",
+        "cursoId": "TII",
+        "semestre": 2,
+        "sigla": "SCLFESO",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-48-6boxjy",
+        "cursoId": "TII",
+        "semestre": 2,
+        "sigla": "SCLPRBD",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Salina",
+          "Fábio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-49-w7ophi",
+        "cursoId": "TII",
+        "semestre": 2,
+        "sigla": "SCLINTI",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Pedro",
+          "Luiz"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-50-83sis2",
+        "cursoId": "TII",
+        "semestre": 3,
+        "sigla": "SCLPRIN",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Sérgio",
+          "Salina"
+        ],
+        "salas": [
+          "C105",
+          "C105"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-51-3n3aj2",
+        "cursoId": "TII",
+        "semestre": 3,
+        "sigla": "SCLTOII",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Ramos",
+          "Sérgio"
+        ],
+        "salas": [
+          "C102",
+          "C106"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-52-acedfw",
+        "cursoId": "TII",
+        "semestre": 3,
+        "sigla": "SCLINSE",
+        "aulasPorSemana": 2,
+        "professores": [
+          "Célia"
+        ],
+        "salas": [
+          "Sala de Aula"
+        ]
+      },
+      {
+        "id": "atribuicao-1793272207617-53-hbobvf",
+        "cursoId": "CORINGA",
+        "semestre": 1,
+        "sigla": "SCLPRW2",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Tiago"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-54-ptgkwo",
+        "cursoId": "CORINGA",
+        "semestre": 1,
+        "sigla": "SCLPRDM",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Pablo"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-55-lg96d9",
+        "cursoId": "CORINGA",
+        "semestre": 1,
+        "sigla": "SCLPRW3",
+        "aulasPorSemana": 4,
+        "professores": [
+          "Pablo"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-56-b039zp",
+        "cursoId": "CORINGA",
+        "semestre": 1,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "João"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-57-hfo9nh",
+        "cursoId": "CORINGA",
+        "semestre": 2,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 2,
+        "professores": [
+          "João"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-58-2q54vl",
+        "cursoId": "CORINGA",
+        "semestre": 2,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 4,
+        "professores": [
+          "João"
+        ],
+        "salas": []
+      },
+      {
+        "id": "atribuicao-1793272207617-59-nmxygz",
+        "cursoId": "CORINGA",
+        "semestre": 2,
+        "sigla": "SCLAPR1",
+        "aulasPorSemana": 2,
+        "professores": [
+          "João"
+        ],
+        "salas": []
+      }
+    ],
+    "salasConsideradasConflito": [
+      "A205 (Hangar)",
+      "C102",
+      "C103",
+      "C104",
+      "C105",
+      "C106",
+      "C107",
+      "C209"
+    ],
+    "salasConsideradasConflitoConfigurado": true
+  }
+}

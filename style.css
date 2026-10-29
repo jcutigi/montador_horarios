@@ -101,6 +101,8 @@ input, select { border: 1px solid #cbd5e1; border-radius: 7px; padding: 9px 10px
 .form-linha input { flex: 1; width: 100%; }
 .lista-cadastros { list-style: none; padding: 0; margin: 14px 0 0; }
 .lista-cadastros li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #edf0f2; }
+.opcao-conflito-sala { display: flex; align-items: center; gap: 6px; margin-left: auto; color: #475569; font-size: .82rem; white-space: nowrap; }
+.opcao-conflito-sala input { width: 16px; height: 16px; margin: 0; }
 .lista-cadastros li:last-child { border-bottom: 0; }
 .lista-cadastros button { padding: 5px 8px; font-size: .8rem; }
 .nota, .ajuda { color: #64748b; font-size: .85rem; }

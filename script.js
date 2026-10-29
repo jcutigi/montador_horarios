@@ -5,6 +5,8 @@ const CHAVE_LOCAL_STORAGE = "montador-horarios-dados";
 let estado = {
   professores: [],
   salas: [],
+  salasConsideradasConflito: [],
+  salasConsideradasConflitoConfigurado: true,
   cursos: [],
   aulas: {},
   atribuicoes: []
@@ -28,6 +30,15 @@ function extrairDados(conteudo) {
   if (!estruturaValida) {
     throw new Error("O arquivo não tem a estrutura esperada.");
   }
+  const salasConsideradasConflitoSalvas = dados.salasConsideradasConflito ?? [];
+  if (!Array.isArray(salasConsideradasConflitoSalvas)
+    || salasConsideradasConflitoSalvas.some(nome => typeof nome !== "string")
+  ) {
+    throw new Error("A lista de salas consideradas em conflito no arquivo não tem a estrutura esperada.");
+  }
+  const salasConsideradasConflito = dados.salasConsideradasConflitoConfigurado === true
+    ? salasConsideradasConflitoSalvas.filter(nome => dados.salas.includes(nome))
+    : dados.salas.filter(nome => normalizarTexto(nome) !== normalizarTexto("Sala de Aula"));
   const atribuicoes = dados.atribuicoes ?? [];
   if (!Array.isArray(atribuicoes) || atribuicoes.some(item =>
     !item
@@ -75,6 +86,8 @@ function extrairDados(conteudo) {
   return {
     ...dados,
     cursos: cursosNormalizados,
+    salasConsideradasConflito,
+    salasConsideradasConflitoConfigurado: true,
     atribuicoes: atribuicoesNormalizadas
   };
 }
@@ -145,6 +158,7 @@ function obterAtribuicoesAlocadas() {
 
 function obterConflitos() {
   const conflitos = new Map();
+  const salasConsideradasConflito = new Set(estado.salasConsideradasConflito || []);
   const registrarConflito = (chave, tipo, nomes) => {
     if (!conflitos.has(chave)) conflitos.set(chave, {professores:new Set(), salas:new Set()});
     for (const nome of nomes) conflitos.get(chave)[tipo].add(nome);
@@ -174,7 +188,9 @@ function obterConflitos() {
       const salasA = a.aula.salas || [];
       const salasB = b.aula.salas || [];
       const professoresEmConflito = professoresA.filter(p => professoresB.includes(p));
-      const salasEmConflito = salasA.filter(s => salasB.includes(s));
+      const salasEmConflito = salasA.filter(s =>
+        salasConsideradasConflito.has(s) && salasB.includes(s)
+      );
       for (const tipo of ["professores", "salas"]) {
         const nomes = tipo === "professores" ? professoresEmConflito : salasEmConflito;
         if (nomes.length) {
@@ -212,7 +228,10 @@ function obterSalasDisponiveis(chave, grupoId) {
   const horarioFim = curso.horarios[Math.max(...indicesGrupo)] || horarioInicio;
   if (!horarioInicio || !horarioFim) return [];
   const intervaloAtual = {inicio: horarioInicio.inicio, fim: horarioFim.fim};
-  const salasOcupadas = new Set(aulaAtual?.salas || []);
+  const salasConsideradasConflito = new Set(estado.salasConsideradasConflito || []);
+  const salasOcupadas = new Set((aulaAtual?.salas || []).filter(sala =>
+    salasConsideradasConflito.has(sala)
+  ));
   const entradas = [];
 
   for (const cursoItem of estado.cursos) {
@@ -222,11 +241,14 @@ function obterSalasDisponiveis(chave, grupoId) {
           const chaveItem = chaveAula(cursoItem.id, turmaItem, diaItem, horarioItem);
           const aula = estado.aulas[chaveItem];
           if (!aula || aula.bloqueado || (grupoAtual && aula.grupoId === grupoAtual) || chaveItem === chave) continue;
-          if (aula.salas?.length) {
+          const salasConflito = (aula.salas || []).filter(sala =>
+            salasConsideradasConflito.has(sala)
+          );
+          if (salasConflito.length) {
             entradas.push({
               dia: diaItem,
               horario: cursoItem.horarios[horarioItem],
-              salas: aula.salas
+              salas: salasConflito
             });
           }
         }
@@ -687,10 +709,30 @@ function renderizarLista(tipo, itens, id) {
   if (!itens.length) { ul.innerHTML = '<li class="nota">Nenhum cadastro.</li>'; return; }
   itens.forEach((nome, indice) => {
     const li = document.createElement("li");
-    li.innerHTML = `<span>${escaparHtml(nome)}</span><button class="secundario perigo" type="button">Excluir</button>`;
+    const opcaoConflitoSala = id === "listaSalas"
+      ? `<label class="opcao-conflito-sala"><input type="checkbox" ${estado.salasConsideradasConflito.includes(nome) ? "checked" : ""}> Considerar conflitos</label>`
+      : "";
+    li.innerHTML = `<span>${escaparHtml(nome)}</span>${opcaoConflitoSala}<button class="secundario perigo" type="button">Excluir</button>`;
+    const checkboxConflito = li.querySelector(".opcao-conflito-sala input");
+    checkboxConflito?.addEventListener("change", () => {
+      if (checkboxConflito.checked) {
+        if (!estado.salasConsideradasConflito.includes(nome)) {
+          estado.salasConsideradasConflito.push(nome);
+        }
+      } else {
+        estado.salasConsideradasConflito = estado.salasConsideradasConflito.filter(sala => sala !== nome);
+      }
+      estado.salasConsideradasConflitoConfigurado = true;
+      salvarEstado();
+      renderizarGrade();
+    });
     li.querySelector("button").addEventListener("click", () => {
       if (!confirm(`Excluir "${nome}" da lista de ${tipo.toLowerCase()}? As aulas existentes não serão alteradas.`)) return;
-      itens.splice(indice,1); salvarEstado(); renderizarCadastros(); renderizarGrade();
+      itens.splice(indice,1);
+      if (id === "listaSalas") {
+        estado.salasConsideradasConflito = estado.salasConsideradasConflito.filter(sala => sala !== nome);
+      }
+      salvarEstado(); renderizarCadastros(); renderizarGrade();
     });
     ul.appendChild(li);
   });
@@ -837,7 +879,11 @@ document.getElementById("formSala").addEventListener("submit", e => {
   const nome = input.value.trim();
   if (!nome) return;
   if (estado.salas.some(s=>s.toLocaleLowerCase("pt-BR")===nome.toLocaleLowerCase("pt-BR"))) { alert("Essa sala já está cadastrada."); return; }
-  estado.salas.push(nome); estado.salas.sort((a,b)=>a.localeCompare(b,"pt-BR")); input.value="";
+  estado.salas.push(nome);
+  if (normalizarTexto(nome) !== normalizarTexto("Sala de Aula")) {
+    estado.salasConsideradasConflito.push(nome);
+  }
+  estado.salas.sort((a,b)=>a.localeCompare(b,"pt-BR")); input.value="";
   salvarEstado();
   renderizarCadastros();
 });
@@ -1264,9 +1310,15 @@ function importarAtribuicoes(texto) {
   estado.professores = [...nomesProfessores.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
   const nomesSalas = new Map(estado.salas.map(nome => [normalizarTexto(nome), nome]));
   novasAtribuicoes.flatMap(item => item.salas).forEach(nome => {
-    if (!nomesSalas.has(normalizarTexto(nome))) nomesSalas.set(normalizarTexto(nome), nome);
+    if (!nomesSalas.has(normalizarTexto(nome))) {
+      nomesSalas.set(normalizarTexto(nome), nome);
+      if (normalizarTexto(nome) !== normalizarTexto("Sala de Aula")) {
+        estado.salasConsideradasConflito.push(nome);
+      }
+    }
   });
   estado.salas = [...nomesSalas.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  estado.salasConsideradasConflitoConfigurado = true;
   estado.atribuicoes = novasAtribuicoes;
 }
 
@@ -1321,8 +1373,13 @@ async function carregarDadosIniciais() {
       const cursosSalvos = conteudoSalvo?.formato === "montador-horarios"
         ? conteudoSalvo.dados.cursos
         : conteudoSalvo.cursos;
+      const dadosSalvosNormalizados = conteudoSalvo?.formato === "montador-horarios"
+        ? conteudoSalvo.dados
+        : conteudoSalvo;
       const quantidadeCoringaSalva = cursosSalvos.find(curso => curso.id === "CORINGA")?.quantidade;
-      if (quantidadeCoringaSalva !== estado.cursos.find(curso => curso.id === "CORINGA")?.quantidade) {
+      if (quantidadeCoringaSalva !== estado.cursos.find(curso => curso.id === "CORINGA")?.quantidade
+        || dadosSalvosNormalizados.salasConsideradasConflitoConfigurado !== true
+      ) {
         salvarEstado();
       }
       statusDados = "";

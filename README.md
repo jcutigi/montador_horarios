@@ -9,7 +9,7 @@ Aplicação web para montar manualmente horários de cursos e turmas, atribuindo
 - Exibe a grade semanal das turmas e dos períodos de cada curso.
 - Exibe uma visão de distribuição com professores e salas nas linhas e os dias da semana nas colunas; células destacadas mostram os dias alocados e a quantidade de aulas.
 - Exibe as grades semanais Coringa 1 e Coringa 2, uma abaixo da outra na aba Horários.
-- Permite cadastrar e remover professores e salas.
+- Permite cadastrar e remover professores e salas, escolhendo quais salas devem ser consideradas na detecção de conflitos. Por padrão, todas são consideradas, exceto “Sala de Aula”; salas novas seguem a mesma regra.
 - Permite inserir ou editar disciplinas, professores e salas em cada aula; clicar no nome de um professor destaca todas as células em que ele está atribuído ao longo da semana.
 - Oferece aulas com duração de um, dois ou quatro períodos consecutivos.
 - Detecta conflitos de professor e de sala em aulas que se sobrepõem.
