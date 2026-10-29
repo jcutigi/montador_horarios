@@ -40,7 +40,7 @@ A importação aceita o formato de backup exportado pela aplicação (`formato: 
 
 Exportar JSON cria um arquivo de backup que pode ser importado posteriormente. O `localStorage` é específico do navegador e da origem usada para acessar a aplicação; ele não substitui um backup e não sincroniza dados entre dispositivos.
 
-A importação de atribuição espera as colunas `Curso`, `Semestre`, `Sigla`, `Aulas por semana` e `Docente`. As colunas `Docente2`, `Sala1` e `Sala2` são opcionais. As salas informadas são associadas às disciplinas e adicionadas ao cadastro quando ainda não existem. A importação substitui a lista de atribuições anterior sem alterar os horários existentes; docentes novos também são adicionados ao cadastro.
+A importação de atribuição espera as colunas `Curso`, `Semestre`, `Sigla`, `Aulas por semana` e `Docente`. As colunas `Docente2`, `Sala1` e `Sala2` são opcionais. As salas informadas são associadas às disciplinas e adicionadas ao cadastro quando ainda não existem. A importação substitui a lista de atribuições anterior, atualiza professores e salas das disciplinas correspondentes que já estão na grade sem mover os horários e acrescenta docentes novos ao cadastro.
 
 ## Limitações do piloto
 

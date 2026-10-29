@@ -1075,6 +1075,72 @@ function importarAtribuicoes(texto) {
   });
   if (!novasAtribuicoes.length) throw new Error("O arquivo não contém linhas de atribuição.");
 
+  const atribuicoesAnteriores = estado.atribuicoes;
+  const atribuicoesAnterioresUsadas = new Set();
+  const gruposExistentes = new Map();
+  Object.entries(estado.aulas).forEach(([chave, aula]) => {
+    if (aula.bloqueado) return;
+    const grupoId = aula.grupoId || chave;
+    if (!gruposExistentes.has(grupoId)) gruposExistentes.set(grupoId, []);
+    gruposExistentes.get(grupoId).push([chave, aula]);
+  });
+  const gruposUsados = new Set();
+  const mesmaAtribuicao = (a, b) =>
+    a.cursoId === b.cursoId
+    && a.semestre === b.semestre
+    && normalizarTexto(a.sigla) === normalizarTexto(b.sigla);
+  const atualizarGrupo = (grupoId, atribuicao) => {
+    const grupo = gruposExistentes.get(grupoId);
+    if (!grupo) return false;
+    grupo.forEach(([, aula]) => {
+      aula.disciplina = atribuicao.sigla;
+      aula.professores = [...atribuicao.professores];
+      aula.salas = [...atribuicao.salas];
+      aula.atribuicaoId = atribuicao.id;
+    });
+    gruposUsados.add(grupoId);
+    return true;
+  };
+
+  novasAtribuicoes.forEach(atribuicao => {
+    const candidatasAnteriores = atribuicoesAnteriores
+      .map((anterior, indice) => ({anterior, indice}))
+      .filter(({anterior, indice}) =>
+        !atribuicoesAnterioresUsadas.has(indice) && mesmaAtribuicao(anterior, atribuicao)
+      )
+      .sort((a, b) =>
+        Number(b.anterior.aulasPorSemana === atribuicao.aulasPorSemana)
+          - Number(a.anterior.aulasPorSemana === atribuicao.aulasPorSemana)
+        || Number(professoresEquivalentes(b.anterior.professores, atribuicao.professores))
+          - Number(professoresEquivalentes(a.anterior.professores, atribuicao.professores))
+      );
+    const anterior = candidatasAnteriores[0];
+    if (!anterior) return;
+    atribuicoesAnterioresUsadas.add(anterior.indice);
+    const grupoAnterior = [...gruposExistentes.entries()].find(([grupoId, grupo]) =>
+      !gruposUsados.has(grupoId)
+      && grupo.some(([, aula]) => aula.atribuicaoId === anterior.anterior.id)
+    );
+    if (grupoAnterior) atualizarGrupo(grupoAnterior[0], atribuicao);
+  });
+
+  novasAtribuicoes.forEach(atribuicao => {
+    const gruposCorrespondentes = [...gruposExistentes.entries()]
+      .filter(([grupoId, grupo]) => {
+        if (gruposUsados.has(grupoId)) return false;
+        const [chave, aula] = grupo[0];
+        const [cursoId, turmaTexto] = chave.split("|");
+        return cursoId === atribuicao.cursoId
+          && Number(turmaTexto) + 1 === atribuicao.semestre
+          && normalizarTexto(aula.disciplina) === normalizarTexto(atribuicao.sigla)
+          && grupo.length === Math.ceil(atribuicao.aulasPorSemana / 2);
+      })
+      .sort(([chaveA], [chaveB]) => chaveA.localeCompare(chaveB));
+    if (gruposCorrespondentes.length) {
+      atualizarGrupo(gruposCorrespondentes[0][0], atribuicao);
+    }
+  });
+
   const nomesProfessores = new Map(estado.professores.map(nome => [normalizarTexto(nome), nome]));
   novasAtribuicoes.flatMap(item => item.professores).forEach(nome => {
     if (!nomesProfessores.has(normalizarTexto(nome))) nomesProfessores.set(normalizarTexto(nome), nome);
