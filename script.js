@@ -187,6 +187,64 @@ function obterConflitos() {
   return conflitos;
 }
 
+function obterSalasDisponiveis(chave, grupoId) {
+  const [cursoId, turmaTexto, diaTexto, horarioTexto] = chave.split("|");
+  const turma = Number(turmaTexto);
+  const dia = Number(diaTexto);
+  const curso = buscarCurso(cursoId);
+  if (!curso) return [];
+
+  const aulaAtual = estado.aulas[chave];
+  const grupoAtual = grupoId || aulaAtual?.grupoId || "";
+  const aulasDoGrupo = grupoAtual
+    ? Object.entries(estado.aulas).filter(([chaveAulaItem, aula]) => {
+        const [cursoItem, turmaItem, diaItem] = chaveAulaItem.split("|");
+        return aula.grupoId === grupoAtual
+          && cursoItem === cursoId
+          && Number(turmaItem) === turma
+          && Number(diaItem) === dia;
+      })
+    : [[chave, aulaAtual || {}]];
+  const indicesGrupo = aulasDoGrupo.length
+    ? aulasDoGrupo.map(([chaveAulaItem]) => Number(chaveAulaItem.split("|")[3]))
+    : [Number(horarioTexto)];
+  const horarioInicio = curso.horarios[Math.min(...indicesGrupo)] || curso.horarios[Number(horarioTexto)];
+  const horarioFim = curso.horarios[Math.max(...indicesGrupo)] || horarioInicio;
+  if (!horarioInicio || !horarioFim) return [];
+  const intervaloAtual = {inicio: horarioInicio.inicio, fim: horarioFim.fim};
+  const salasOcupadas = new Set(aulaAtual?.salas || []);
+  const entradas = [];
+
+  for (const cursoItem of estado.cursos) {
+    for (let turmaItem = 0; turmaItem < cursoItem.quantidade; turmaItem++) {
+      for (let diaItem = 0; diaItem < DIAS.length; diaItem++) {
+        for (let horarioItem = 0; horarioItem < cursoItem.horarios.length; horarioItem++) {
+          const chaveItem = chaveAula(cursoItem.id, turmaItem, diaItem, horarioItem);
+          const aula = estado.aulas[chaveItem];
+          if (!aula || aula.bloqueado || (grupoAtual && aula.grupoId === grupoAtual) || chaveItem === chave) continue;
+          if (aula.salas?.length) {
+            entradas.push({
+              dia: diaItem,
+              horario: cursoItem.horarios[horarioItem],
+              salas: aula.salas
+            });
+          }
+        }
+      }
+    }
+  }
+
+  entradas.forEach(entrada => {
+    if (entrada.dia === dia && intervalosSobrepoem(intervaloAtual, entrada.horario)) {
+      entrada.salas.forEach(sala => salasOcupadas.add(sala));
+    }
+  });
+
+  return estado.salas
+    .filter(sala => !salasOcupadas.has(sala))
+    .sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
 function obterAvisosDescanso() {
   const avisos = new Map();
   const aulas = [];
@@ -284,12 +342,20 @@ function renderizarGrade() {
           );
           const professores = (aula.professores || []).join(", ");
           const salas = (aula.salas || []).join(", ");
+          const salasRenderizadas = (aula.salas || []).map(sala => {
+            if (!conflito?.salas.has(sala)) return escaparHtml(sala);
+            const disponiveis = obterSalasDisponiveis(chave, aula.grupoId);
+            const titulo = disponiveis.length
+              ? `Salas disponíveis para este horário: ${disponiveis.join(", ")}`
+              : "Nenhuma sala cadastrada está disponível neste horário.";
+            return `<span class="sala-conflito" title="${escaparHtml(titulo)}">${escaparHtml(sala)}</span>`;
+          }).join(", ");
           const continuacao = Boolean(aula.grupoId && aula.indiceSegmento > 0);
           const professorDestacado = Boolean(professorEmDestaque && aula.professores?.includes(professorEmDestaque));
           html += `<td><div class="celula-container"><div class="celula-aula ${indisponivel?"indisponivel":""} ${!indisponivel && (aula.disciplina || professores || salas) ? "preenchida":""} ${conflito?"conflito":""} ${professoresSemDescanso.size?"descanso-insuficiente":""} ${professorDestacado?"professor-destacado":""}" data-chave="${escaparHtml(chave)}" role="group" tabindex="0" aria-label="${escaparHtml(indisponivel ? "Horário indisponível" : aula.disciplina || "Horário vazio")}" title="${escaparHtml([...detalhesConflito, ...detalhesDescanso, indisponivel ? "Horário indisponível" : "Clique para editar aula"].join(". "))}">
             ${indisponivel ? `<span class="disciplina">Indisponível</span>` : (continuacao ? `<span class="detalhe">↳ continuação</span>` : (aula.disciplina?`<span class="disciplina">${escaparHtml(aula.disciplina)}</span>`:`<span class="ajuda">+ Aula</span>`))}
             ${!continuacao && aula.professores?.length ? `<span class="detalhe">${aula.professores.map(nome => `<span class="professor-grade" role="button" tabindex="0" aria-pressed="${nome === professorEmDestaque}" aria-label="Destacar aulas de ${escaparHtml(nome)}">${escaparHtml(nome)}</span>`).join(", ")}</span>` : ""}
-            ${!continuacao && salas?`<span class="detalhe">${escaparHtml(salas)}</span>`:""}
+            ${!continuacao && salas?`<span class="detalhe">${salasRenderizadas}</span>`:""}
             ${detalhesConflito.map(detalhe => `<span class="detalhe conflito-descricao">${escaparHtml(detalhe)}</span>`).join("")}
             ${detalhesDescanso.map(detalhe => `<span class="detalhe descanso-descricao">${escaparHtml(detalhe)}</span>`).join("")}
           </div><button type="button" class="alternar-indisponibilidade ${indisponivel?"marcado":""}" data-indisponibilidade="${escaparHtml(chave)}" aria-label="${indisponivel?"Liberar este horário":"Marcar este horário como indisponível"}" title="${indisponivel?"Liberar horário":"Marcar horário como indisponível"}">${indisponivel?"↻":"⊘"}</button></div></td>`;

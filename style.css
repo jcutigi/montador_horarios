@@ -78,6 +78,7 @@ p { line-height: 1.45; }
 .celula-aula:focus-visible { outline: 3px solid #93c5fd; outline-offset: -3px; }
 .professor-grade { border-radius: 3px; cursor: pointer; }
 .professor-grade:hover, .professor-grade:focus-visible { background: #ede9fe; color: #5b21b6; text-decoration: underline; }
+.sala-conflito { text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
 .celula-aula .disciplina { display: block; font-weight: 700; margin-bottom: 4px; }
 .celula-aula .detalhe { display: block; font-size: .72rem; margin-top: 3px; }
 .celula-aula .conflito-descricao { font-weight: 700; }
