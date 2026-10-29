@@ -1014,6 +1014,307 @@ document.getElementById("limparAulaBtn").addEventListener("click", () => {
   renderizarGrade();
 });
 
+async function gerarHorarioAutomatico() {
+  const botao = document.getElementById("gerarHorarioBtn");
+  const status = document.getElementById("gerarHorarioStatus");
+  if (!estado.atribuicoes.length) {
+    status.textContent = "Importe ou cadastre atribuições antes de gerar o horário.";
+    return;
+  }
+
+  let tarefas;
+  try {
+    tarefas = estado.atribuicoes.map((atribuicao, indice) => {
+      const curso = buscarCurso(atribuicao.cursoId);
+      if (!curso || !Number.isInteger(atribuicao.semestre)
+        || atribuicao.semestre < 1 || atribuicao.semestre > curso.quantidade
+      ) {
+        throw new Error(`A atribuição "${atribuicao.sigla}" aponta para curso ou turma inexistente.`);
+      }
+      const duracao = Math.ceil(atribuicao.aulasPorSemana / 2);
+      if (duracao > curso.horarios.length) {
+        throw new Error(`A atribuição "${atribuicao.sigla}" precisa de ${duracao} períodos consecutivos, mas ${curso.nome} tem apenas ${curso.horarios.length}.`);
+      }
+      return {
+        atribuicao,
+        indice,
+        curso,
+        turma: atribuicao.semestre - 1,
+        duracao,
+        professores: [...new Set(atribuicao.professores || [])],
+        salas: [...new Set(atribuicao.salas || [])]
+      };
+    });
+  } catch (erro) {
+    status.textContent = `Não foi possível gerar o horário: ${erro.message}`;
+    return;
+  }
+
+  const bloqueios = new Set(Object.entries(estado.aulas)
+    .filter(([, aula]) => aula.bloqueado)
+    .map(([chave]) => chave));
+  const gruposExistentes = new Map();
+  Object.entries(estado.aulas).forEach(([chave, aula]) => {
+    if (aula.bloqueado) return;
+    const grupoId = aula.grupoId || chave;
+    if (!gruposExistentes.has(grupoId)) gruposExistentes.set(grupoId, []);
+    gruposExistentes.get(grupoId).push([chave, aula]);
+  });
+  const salasObrigatorias = new Set(tarefas.flatMap(tarefa => tarefa.salas));
+  const salasPorPadrao = [...new Set([...salasObrigatorias, ...estado.salas])]
+    .sort((a, b) => Number(!salasObrigatorias.has(a)) - Number(!salasObrigatorias.has(b))
+      || a.localeCompare(b, "pt-BR"));
+  const salasConsideradas = new Set(estado.salasConsideradasConflito || []);
+  tarefas.forEach(tarefa => {
+    const grupo = [...gruposExistentes.values()].find(aulas =>
+      aulas.some(([, aula]) => aula.atribuicaoId === tarefa.atribuicao.id)
+    ) || [...gruposExistentes.values()].find(aulas => {
+      if (aulas.length !== tarefa.duracao) return false;
+      const [chave, aula] = aulas[0];
+      const [cursoId, turma] = chave.split("|");
+      return cursoId === tarefa.curso.id
+        && Number(turma) === tarefa.turma
+        && normalizarTexto(aula.disciplina) === normalizarTexto(tarefa.atribuicao.sigla)
+        && professoresEquivalentes(aula.professores, tarefa.professores);
+    });
+    if (!grupo) return;
+    const [chave, aula] = [...grupo].sort((a, b) =>
+      Number(a[1].indiceSegmento || 0) - Number(b[1].indiceSegmento || 0)
+    )[0];
+    const [, , dia, inicio] = chave.split("|").map(Number);
+    tarefa.preferida = {dia, inicio};
+    tarefa.salasPreferidas = [...new Set(aula.salas || [])];
+  });
+  const salasPossiveisSemPreferencia = salasPorPadrao.length
+    ? salasPorPadrao.map(sala => [sala])
+    : [[]];
+  tarefas.forEach(tarefa => {
+    tarefa.candidatos = [];
+    for (let dia = 0; dia < DIAS.length; dia++) {
+      for (let inicio = 0; inicio + tarefa.duracao <= tarefa.curso.horarios.length; inicio++) {
+        const chaves = Array.from({length: tarefa.duracao}, (_, deslocamento) =>
+          chaveAula(tarefa.curso.id, tarefa.turma, dia, inicio + deslocamento)
+        );
+        if (chaves.some(chave => bloqueios.has(chave))) continue;
+        const intervalo = {
+          inicio: tarefa.curso.horarios[inicio].inicio,
+          fim: tarefa.curso.horarios[inicio + tarefa.duracao - 1].fim
+        };
+        const salasPossiveis = tarefa.salas.length
+          ? [tarefa.salas]
+          : salasPossiveisSemPreferencia;
+        salasPossiveis.forEach(salas => tarefa.candidatos.push({
+          tarefa,
+          dia,
+          inicio,
+          intervalo,
+          chaves,
+          salas: [...salas]
+        }));
+      }
+    }
+  });
+
+  const pesoSala = Math.max(1000, estado.professores.length * DIAS.length + 1);
+  const ocupacaoTurma = new Set(bloqueios);
+  const agendadas = [];
+  const usosSala = new Map();
+  const diasProfessor = new Map();
+  const eventosProfessor = new Map();
+  const eventosSala = new Map();
+  const adicionarIndiceEvento = (mapa, nome, dia, intervalo) => {
+    if (!mapa.has(nome)) mapa.set(nome, Array.from({length: DIAS.length}, () => []));
+    mapa.get(nome)[dia].push(intervalo);
+  };
+  const removerIndiceEvento = (mapa, nome, dia) => {
+    mapa.get(nome)[dia].pop();
+  };
+  const haSobreposicao = (mapa, nome, dia, intervalo) =>
+    (mapa.get(nome)?.[dia] || []).some(outro => intervalosSobrepoem(intervalo, outro));
+  let melhorPlano = null;
+  let melhorPontuacao = Infinity;
+  let nos = 0;
+  let encerradaPorLimite = false;
+  const limiteNos = 250000;
+  const limiteTempo = 30000;
+  const inicioBusca = performance.now();
+  const aguardarProximoTurno = () => new Promise(resolve => setTimeout(resolve, 0));
+
+  const buscar = async restantes => {
+    if (encerradaPorLimite) return;
+    nos++;
+    if (nos > limiteNos || performance.now() - inicioBusca > limiteTempo) {
+      encerradaPorLimite = true;
+      return;
+    }
+    if (nos % 250 === 0) {
+      status.textContent = `Buscando uma distribuição sem conflitos… ${nos.toLocaleString("pt-BR")} combinações verificadas.`;
+      await aguardarProximoTurno();
+      if (encerradaPorLimite) return;
+    }
+    if (!restantes.length) {
+      const pontuacao = usosSala.size * pesoSala
+        + [...diasProfessor.values()].reduce((total, dias) => total + dias.size, 0);
+      if (pontuacao < melhorPontuacao) {
+        melhorPontuacao = pontuacao;
+        melhorPlano = agendadas.map(item => ({...item, salas: [...item.salas]}));
+      }
+      return;
+    }
+    const pontuacaoAtual = usosSala.size * pesoSala
+      + [...diasProfessor.values()].reduce((total, dias) => total + dias.size, 0);
+    if (pontuacaoAtual >= melhorPontuacao) return;
+
+    let tarefaEscolhida = null;
+    let candidatosEscolhidos = null;
+    for (const tarefa of restantes) {
+      const candidatosViaveis = tarefa.candidatos.filter(candidato =>
+        candidato.chaves.every(chave => !ocupacaoTurma.has(chave))
+        && tarefa.professores.every(nome =>
+          !haSobreposicao(eventosProfessor, nome, candidato.dia, candidato.intervalo)
+        )
+        && candidato.salas.every(sala =>
+          !salasConsideradas.has(sala)
+          || !haSobreposicao(eventosSala, sala, candidato.dia, candidato.intervalo)
+        )
+      );
+      if (!candidatosViaveis.length) return;
+      if (!candidatosEscolhidos || candidatosViaveis.length < candidatosEscolhidos.length) {
+        tarefaEscolhida = tarefa;
+        candidatosEscolhidos = candidatosViaveis;
+        if (candidatosViaveis.length === 1) break;
+      }
+    }
+    const tarefa = tarefaEscolhida;
+    const candidatos = candidatosEscolhidos.map(candidato => {
+      const novosProfessores = tarefa.professores.filter(nome =>
+        !diasProfessor.get(nome)?.has(candidato.dia)
+      );
+      const novasSalas = candidato.salas.filter(sala => !usosSala.has(sala));
+      return {
+        ...candidato,
+        novosProfessores,
+        novasSalas,
+        custo: novasSalas.length * pesoSala + novosProfessores.length
+      };
+    }).sort((a, b) =>
+      a.custo - b.custo
+      || Number(!(tarefa.preferida?.dia === a.dia && tarefa.preferida?.inicio === a.inicio))
+        - Number(!(tarefa.preferida?.dia === b.dia && tarefa.preferida?.inicio === b.inicio))
+      || Number(tarefa.salasPreferidas?.join("|") !== a.salas.join("|"))
+        - Number(tarefa.salasPreferidas?.join("|") !== b.salas.join("|"))
+      || a.dia - b.dia
+      || a.inicio - b.inicio
+      || a.salas.join("|").localeCompare(b.salas.join("|"), "pt-BR")
+    );
+
+    for (const candidato of candidatos) {
+      const pontuacaoParcial = (usosSala.size + candidato.novasSalas.length) * pesoSala
+        + [...diasProfessor.values()].reduce((total, dias) => total + dias.size, 0)
+        + candidato.novosProfessores.length;
+      if (pontuacaoParcial >= melhorPontuacao) continue;
+
+      candidato.chaves.forEach(chave => ocupacaoTurma.add(chave));
+      candidato.salas.forEach(sala => usosSala.set(sala, (usosSala.get(sala) || 0) + 1));
+      const diasNovos = [];
+      tarefa.professores.forEach(nome => {
+        if (!diasProfessor.has(nome)) diasProfessor.set(nome, new Set());
+        const dias = diasProfessor.get(nome);
+        if (!dias.has(candidato.dia)) {
+          dias.add(candidato.dia);
+          diasNovos.push(nome);
+        }
+      });
+      tarefa.professores.forEach(nome =>
+        adicionarIndiceEvento(eventosProfessor, nome, candidato.dia, candidato.intervalo)
+      );
+      candidato.salas.filter(sala => salasConsideradas.has(sala)).forEach(sala =>
+        adicionarIndiceEvento(eventosSala, sala, candidato.dia, candidato.intervalo)
+      );
+      agendadas.push({
+        tarefa,
+        dia: candidato.dia,
+        inicio: candidato.inicio,
+        intervalo: candidato.intervalo,
+        chaves: candidato.chaves,
+        salas: candidato.salas,
+        professores: tarefa.professores
+      });
+
+      await buscar(restantes.filter(item => item !== tarefa));
+
+      agendadas.pop();
+      tarefa.professores.forEach(nome =>
+        removerIndiceEvento(eventosProfessor, nome, candidato.dia)
+      );
+      candidato.salas.filter(sala => salasConsideradas.has(sala)).forEach(sala =>
+        removerIndiceEvento(eventosSala, sala, candidato.dia)
+      );
+      diasNovos.forEach(nome => {
+        diasProfessor.get(nome).delete(candidato.dia);
+        if (!diasProfessor.get(nome).size) diasProfessor.delete(nome);
+      });
+      candidato.salas.forEach(sala => {
+        const quantidade = usosSala.get(sala) - 1;
+        if (quantidade) usosSala.set(sala, quantidade);
+        else usosSala.delete(sala);
+      });
+      candidato.chaves.forEach(chave => ocupacaoTurma.delete(chave));
+      if (encerradaPorLimite) return;
+    }
+  };
+
+  botao.disabled = true;
+  status.textContent = `Preparando a busca para ${tarefas.length} atribuições…`;
+  try {
+    await buscar(tarefas);
+    if (!melhorPlano) {
+      status.textContent = encerradaPorLimite
+        ? `Não foi encontrada uma distribuição completa sem conflitos nos limites da busca (${nos.toLocaleString("pt-BR")} combinações). A grade atual foi mantida.`
+        : "Não existe uma distribuição completa sem conflitos para as restrições atuais. A grade atual foi mantida.";
+      return;
+    }
+
+    const novasAulas = Object.fromEntries([...bloqueios].map(chave =>
+      [chave, {bloqueado: true}]
+    ));
+    melhorPlano.forEach(({tarefa, dia, inicio, chaves, salas}, indicePlano) => {
+      const grupoId = `gerado-${Date.now()}-${indicePlano}`;
+      chaves.forEach((chave, indiceSegmento) => {
+        novasAulas[chave] = {
+          disciplina: tarefa.atribuicao.sigla,
+          professores: [...tarefa.professores],
+          salas: [...salas],
+          grupoId,
+          indiceSegmento,
+          atribuicaoId: tarefa.atribuicao.id
+        };
+      });
+    });
+    estado.aulas = novasAulas;
+    salvarEstado();
+    renderizarGrade();
+    const diasDeTrabalho = new Map();
+    melhorPlano.forEach(({tarefa, dia}) => {
+      tarefa.professores.forEach(nome => {
+        if (!diasDeTrabalho.has(nome)) diasDeTrabalho.set(nome, new Set());
+        diasDeTrabalho.get(nome).add(dia);
+      });
+    });
+    const diasTotais = [...diasDeTrabalho.values()].reduce((total, dias) => total + dias.size, 0);
+    const salasUsadas = new Set(melhorPlano.flatMap(item => item.salas));
+    const complemento = encerradaPorLimite ? " Melhor solução encontrada dentro do limite da busca." : " Busca concluída.";
+    status.textContent = `Horário gerado sem conflitos: ${tarefas.length} atribuições, ${salasUsadas.size} salas e ${diasTotais} dias-professor. Foram verificadas ${nos.toLocaleString("pt-BR")} combinações.${complemento}`;
+  } catch (erro) {
+    console.error("Não foi possível gerar o horário:", erro);
+    status.textContent = `Não foi possível gerar o horário: ${erro.message}`;
+  } finally {
+    botao.disabled = false;
+  }
+}
+
+document.getElementById("gerarHorarioBtn").addEventListener("click", gerarHorarioAutomatico);
+
 document.getElementById("limparHorariosBtn").addEventListener("click", () => {
   if (!Object.keys(estado.aulas).length) {
     alert("A grade já está vazia.");

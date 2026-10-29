@@ -14,6 +14,7 @@
     </div>
     <div class="acoes-topo">
       <button id="limparHorariosBtn" class="secundario perigo">Limpar horários</button>
+      <button id="gerarHorarioBtn">Gerar horário</button>
       <label class="botao secundario arquivo-label" for="importarAtribuicao">Importar atribuição CSV</label>
       <input id="importarAtribuicao" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values" hidden>
       <button id="exportarAtribuicaoBtn" class="secundario">Exportar atribuição CSV</button>
@@ -40,6 +41,7 @@
         <div class="legenda"><span class="ponto conflito"></span> Conflito de professor/sala <span class="ponto descanso"></span> Descanso insuficiente (aula até 22:30; próxima a partir de 09:30)</div>
       </div>
       <div id="resumoConflitos" class="resumo" aria-live="polite"></div>
+      <p id="gerarHorarioStatus" class="mensagem-geracao" aria-live="polite"></p>
       <p id="destaqueProfessor" class="destaque-professor escondido" aria-live="polite"></p>
       <div id="gradeGeral" class="grade-geral"></div>
     </section>

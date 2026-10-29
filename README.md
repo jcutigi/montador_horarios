@@ -1,6 +1,6 @@
 # Montador de horários
 
-Aplicação web para montar manualmente horários de cursos e turmas, atribuindo disciplinas, professores e salas. A grade verifica conflitos de uso e sinaliza situações que precisam de atenção.
+Aplicação web para montar e gerar horários de cursos e turmas, atribuindo disciplinas, professores e salas. A grade verifica conflitos de uso e sinaliza situações que precisam de atenção.
 
 > **Projeto piloto:** este é um projeto de experimentações com o uso de inteligência artificial. Foi desenvolvido **100% com IA** e tem caráter experimental; não deve ser considerado um sistema de produção sem validação e revisão adequadas.
 
@@ -9,6 +9,7 @@ Aplicação web para montar manualmente horários de cursos e turmas, atribuindo
 - Exibe a grade semanal das turmas e dos períodos de cada curso.
 - Exibe uma visão de distribuição com professores e salas nas linhas e os dias da semana nas colunas; células destacadas mostram os dias alocados e a quantidade de aulas.
 - Exibe as grades semanais Coringa 1 e Coringa 2, uma abaixo da outra na aba Horários.
+- Gera uma distribuição automática das atribuições, preservando horários indisponíveis e evitando sobreposições de professores e salas; prioriza usar menos salas e agrupar os dias de trabalho dos professores.
 - Permite cadastrar e remover professores e salas, escolhendo quais salas devem ser consideradas na detecção de conflitos. Por padrão, todas são consideradas, exceto “Sala de Aula”; salas novas seguem a mesma regra.
 - Permite inserir ou editar disciplinas, professores e salas em cada aula; clicar no nome de um professor destaca todas as células em que ele está atribuído ao longo da semana.
 - Oferece aulas com duração de um, dois ou quatro períodos consecutivos.
@@ -47,7 +48,7 @@ Exportar atribuição CSV gera essas mesmas colunas e pode ser usado para import
 
 ## Limitações do piloto
 
-- A montagem e a validação do horário são manuais; o sistema não gera uma grade automaticamente.
+- A geração automática usa uma busca limitada; quando não encontra uma solução completa, mantém a grade atual. Quando a busca atinge o limite de tempo ou combinações, informa que o resultado pode não ser o melhor possível.
 - Os dados ficam no navegador e podem ser removidos se o armazenamento local for apagado.
 - Os avisos ajudam a identificar conflitos e descanso insuficiente, mas as regras e os horários precisam ser conferidos pelos responsáveis.
 - O aviso de descanso considera os dias úteis exibidos na grade (segunda a sexta).
