@@ -956,6 +956,56 @@ document.getElementById("exportarBtn").addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+function escaparCampoCsv(valor) {
+  const texto = String(valor ?? "");
+  return /[",\r\n;]/.test(texto) ? `"${texto.replace(/"/g, '""')}"` : texto;
+}
+
+function gerarCsvAtribuicoes(atribuicoes) {
+  if (atribuicoes.some(item =>
+    (item.professores || []).length > 2 || (item.salas || []).length > 2
+  )) {
+    throw new Error("O formato CSV de atribuição aceita até dois docentes e duas salas por disciplina. Ajuste as atribuições antes de exportar.");
+  }
+  const linhas = [
+    ["Semestre", "Curso", "Sigla", "Aulas por semana", "Docente", "Docente2", "Sala1", "Sala2"],
+    ...atribuicoes.map(item => [
+      item.semestre,
+      item.cursoId,
+      item.sigla,
+      item.aulasPorSemana,
+      item.professores?.[0] || "",
+      item.professores?.[1] || "",
+      item.salas?.[0] || "",
+      item.salas?.[1] || ""
+    ])
+  ];
+  return `\uFEFF${linhas.map(linha => linha.map(escaparCampoCsv).join(",")).join("\r\n")}`;
+}
+
+document.getElementById("exportarAtribuicaoBtn").addEventListener("click", () => {
+  if (!estado.atribuicoes.length) {
+    alert("Não há atribuições para exportar.");
+    return;
+  }
+  let csv;
+  try {
+    csv = gerarCsvAtribuicoes(estado.atribuicoes);
+  } catch (erro) {
+    alert(erro.message);
+    return;
+  }
+  const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `atribuicoes-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+});
+
 function contarSeparadoresCsv(linha, separador) {
   let emAspas = false;
   let quantidade = 0;

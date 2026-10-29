@@ -1,0 +1,61 @@
+﻿Semestre,Curso,Sigla,Aulas por semana,Docente,Docente2,Sala1,Sala2
+1,ADS,SCLAPR2,4,Bianchi,Eloize,C104,C107
+1,ADS,SCLAPR2,2,Bianchi,Eloize,C104,C107
+1,ADS,SCLING2,2,Aline,,Sala de Aula,
+1,ADS,SCLIHCO,2,Eloize,,Sala de Aula,
+1,ADS,SCLPEST,2,Santinho,,Sala de Aula,
+1,ADS,SCLPRW1,4,Tiago,Jorge,C104,C107
+1,ADS,SCLSOPE,4,Célia,,Sala de Aula,
+2,ADS,SCLAXD1,4,Ramos,,C102,
+2,ADS,SCLAPOO,4,Lucas,,C105,
+2,ADS,SCLBDD2,4,Mateus,Silvana,C102,C106
+2,ADS,SCLPRW3,4,Carlão,,C105,
+2,ADS,SCLRCO1,4,Luiz,,Sala de Aula,
+3,ADS,SCLAXD3,4,João,,C105,
+3,ADS,SCLAXD3,2,João,,Sala de Aula,
+3,ADS,SCLASEG,4,Danilo,,C209,
+3,ADS,SCLCOSS,2,Mateus,,Sala de Aula,
+3,ADS,SCLEMPC,2,Salina,Sérgio,C105,
+3,ADS,SCLTPCO,4,Mateus,,C106,
+1,BES,SCLAPR1,4,Eloize,Silvana,C104,107
+1,BES,SCLAPR1,2,Eloize,Silvana,C104,107
+1,BES,SCLPPSW,4,Jorge,,C103,
+1,BES,SCLIWEB,2,Luiz,Carlão,C104,
+1,BES,SCLARCO,2,Salina,,C107,
+1,BES,SCLMATC,4,Santinho,,C103,
+1,BES,SCLING1,2,Aline,,C103,
+2,BES,SCLESDD,4,Pablo,,C107,
+2,BES,SCLBDD1,4,Fábio,Mateus,C104,C107
+2,BES,SCLPROO,4,Lucas,,C102,
+2,BES,SCLRQSW,2,Célia,,Sala de Aula,
+2,BES,SCLPRW2,4,Carlão,,C107,
+2,BES,SCLSINF,2,Célia,,Sala de Aula,
+3,BES,SCLVVTS,4,Lucas,,C209,
+3,BES,SCLGCSW,2,Tiago,,C209,
+3,BES,SCLPRDM,4,Pedro,,C209,
+3,BES,SCLRCO1,4,Luiz,,Sala de Aula,
+3,BES,SCLAMMD,4,Ramos,,C209,
+3,BES,SCLMPQC,2,Célia,,Sala de Aula,
+4,BES,SCLCOSS,2,Mateus,,Sala de Aula,
+4,BES,SCLASEG,4,Danilo,,C105,
+4,BES,SCLDMDM,4,Carlão,,C105,
+4,BES,SCLTCDD,4,Bianchi,,C105,
+4,BES,SCLAXB3,4,Fábio,,C105,
+1,TII,SCLALGP,4,João,Silvana,C104,C107
+1,TII,SCLDSW1,4,Jorge,Fábio,C105,C105
+1,TII,SCLILOG,2,Bianchi,,C105,
+2,TII,SCLPLCM,1,Aline,,Sala de Aula,
+2,TII,SCLDSW2,4,Danilo,Tiago,C104,C107
+2,TII,SCLFESO,2,Bianchi,,Sala de Aula,
+2,TII,SCLPRBD,4,Salina,Fábio,C102,C106
+3,TII,SCLINTI,4,Pedro,Luiz,C105,C105
+3,TII,SCLPRIN,4,Sérgio,Salina,C105,C105
+3,TII,SCLTOII,4,Ramos,Sérgio,C102,C106
+3,TII,SCLINSE,2,Célia,,Sala de Aula,
+1,CORINGA,SCLPRW2,4,Tiago,,,
+1,CORINGA,SCLPRDM,4,Pablo,,,
+1,CORINGA,SCLPRW3,4,Pablo,,,
+1,CORINGA,SCLAPR1,4,João,,,
+2,CORINGA,SCLAPR1,2,João,,,
+2,CORINGA,SCLAPR1,4,João,,,
+2,CORINGA,SCLAPR1,2,João,,,
