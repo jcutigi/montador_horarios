@@ -24,6 +24,7 @@
 
   <nav class="abas" aria-label="Seções do sistema">
     <button class="aba ativa" data-aba="horarios">Horários</button>
+    <button class="aba" data-aba="distribuicao">Distribuição</button>
     <button class="aba" data-aba="cadastros">Cadastros</button>
     <button class="aba" data-aba="configuracao">Configuração dos horários</button>
   </nav>
@@ -40,6 +41,26 @@
       <div id="resumoConflitos" class="resumo" aria-live="polite"></div>
       <p id="destaqueProfessor" class="destaque-professor escondido" aria-live="polite"></p>
       <div id="gradeGeral" class="grade-geral"></div>
+    </section>
+
+    <section id="aba-distribuicao" class="painel escondido">
+      <div class="cabecalho-secao">
+        <div>
+          <h2>Distribuição das alocações</h2>
+          <p>Veja em quais dias professores e salas estão alocados e quantas aulas cada um tem.</p>
+        </div>
+        <div class="legenda"><span class="ponto dia-alocado"></span> Dia com alocação</div>
+      </div>
+      <div class="duas-colunas tabelas-distribuicao">
+        <div class="cartao">
+          <h3>Professores × dias da semana</h3>
+          <div id="distribuicaoProfessores" class="tabela-distribuicao"></div>
+        </div>
+        <div class="cartao">
+          <h3>Salas × dias da semana</h3>
+          <div id="distribuicaoSalas" class="tabela-distribuicao"></div>
+        </div>
+      </div>
     </section>
 
     <section id="aba-cadastros" class="painel escondido">

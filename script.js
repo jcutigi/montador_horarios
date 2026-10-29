@@ -218,6 +218,7 @@ function obterAvisosDescanso() {
 }
 
 function renderizarGrade() {
+  renderizarDistribuicao();
   const container = document.getElementById("gradeGeral");
   const conflitos = obterConflitos();
   const avisosDescanso = obterAvisosDescanso();
@@ -407,6 +408,49 @@ function renderizarGrade() {
     resumo.className = "resumo";
     resumo.textContent = estado.cursos.length ? "Nenhum conflito de professor ou sala detectado." : "";
   }
+}
+
+function renderizarDistribuicao() {
+  const professores = new Map(estado.professores.map(nome => [nome, Array(DIAS.length).fill(0)]));
+  const salas = new Map(estado.salas.map(nome => [nome, Array(DIAS.length).fill(0)]));
+
+  for (const curso of estado.cursos) {
+    for (let turma = 0; turma < curso.quantidade; turma++) {
+      for (let dia = 0; dia < DIAS.length; dia++) {
+        for (let horario = 0; horario < curso.horarios.length; horario++) {
+          const aula = estado.aulas[chaveAula(curso.id, turma, dia, horario)];
+          if (!aula || aula.bloqueado || (aula.grupoId && aula.indiceSegmento > 0)) continue;
+          for (const nome of aula.professores || []) {
+            if (!professores.has(nome)) professores.set(nome, Array(DIAS.length).fill(0));
+            professores.get(nome)[dia]++;
+          }
+          for (const nome of aula.salas || []) {
+            if (!salas.has(nome)) salas.set(nome, Array(DIAS.length).fill(0));
+            salas.get(nome)[dia]++;
+          }
+        }
+      }
+    }
+  }
+
+  const renderizarTabela = (containerId, recursos, tipo) => {
+    const container = document.getElementById(containerId);
+    const linhas = [...recursos.entries()].sort(([a], [b]) => a.localeCompare(b, "pt-BR"));
+    if (!linhas.length) {
+      container.innerHTML = '<p class="nota">Nenhum cadastro ou alocação disponível.</p>';
+      return;
+    }
+    container.innerHTML = `<table><thead><tr><th>${tipo}</th>${DIAS.map(dia =>
+      `<th scope="col" title="${escaparHtml(dia)}">${escaparHtml(dia.slice(0, 3))}</th>`
+    ).join("")}</tr></thead><tbody>${linhas.map(([nome, contagens]) =>
+      `<tr><th scope="row">${escaparHtml(nome)}</th>${contagens.map((quantidade, dia) =>
+        `<td class="${quantidade ? "dia-alocado" : ""}" aria-label="${escaparHtml(`${nome}: ${DIAS[dia]}, ${quantidade ? `${quantidade} ${quantidade === 1 ? "alocação" : "alocações"}` : "sem alocação"}`)}" title="${escaparHtml(quantidade ? `${quantidade} ${quantidade === 1 ? "alocação" : "alocações"}` : "Sem alocação")}">${quantidade || "—"}</td>`
+      ).join("")}</tr>`
+    ).join("")}</tbody></table>`;
+  };
+
+  renderizarTabela("distribuicaoProfessores", professores, "Professor");
+  renderizarTabela("distribuicaoSalas", salas, "Sala");
 }
 
 function alternarIndisponibilidade(chave) {

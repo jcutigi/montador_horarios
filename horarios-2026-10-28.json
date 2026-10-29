@@ -1,7 +1,7 @@
 {
   "formato": "montador-horarios",
   "versao": 1,
-  "exportadoEm": "2026-10-28T14:39:21.357Z",
+  "exportadoEm": "2026-10-28T19:30:39.422Z",
   "dados": {
     "professores": [
       "Aline",
@@ -781,28 +781,6 @@
         "indiceSegmento": 1,
         "atribuicaoId": "atribuicao-1793197594334-6-clxiwm"
       },
-      "TII|0|0|0": {
-        "disciplina": "SCLDSW1",
-        "professores": [
-          "Jorge",
-          "Fábio"
-        ],
-        "salas": [],
-        "grupoId": "aula-1793198095369-g6kqlu",
-        "indiceSegmento": 0,
-        "atribuicaoId": "atribuicao-1793197594335-43-pbgeug"
-      },
-      "TII|0|0|1": {
-        "disciplina": "SCLDSW1",
-        "professores": [
-          "Jorge",
-          "Fábio"
-        ],
-        "salas": [],
-        "grupoId": "aula-1793198095369-g6kqlu",
-        "indiceSegmento": 1,
-        "atribuicaoId": "atribuicao-1793197594335-43-pbgeug"
-      },
       "BES|1|0|0": {
         "disciplina": "SCLPRW2",
         "professores": [
@@ -844,38 +822,6 @@
         "grupoId": "aula-1793198111826-x2kodp",
         "indiceSegmento": 1,
         "atribuicaoId": "atribuicao-1793197594335-26-erghpa"
-      },
-      "TII|0|3|0": {
-        "disciplina": "SCLALGP",
-        "professores": [
-          "João",
-          "Silvana"
-        ],
-        "salas": [],
-        "grupoId": "aula-1793198093545-m8bzju",
-        "indiceSegmento": 0,
-        "atribuicaoId": "atribuicao-1793197594335-42-wuwa8t"
-      },
-      "TII|0|3|1": {
-        "disciplina": "SCLALGP",
-        "professores": [
-          "João",
-          "Silvana"
-        ],
-        "salas": [],
-        "grupoId": "aula-1793198093545-m8bzju",
-        "indiceSegmento": 1,
-        "atribuicaoId": "atribuicao-1793197594335-42-wuwa8t"
-      },
-      "TII|0|1|0": {
-        "disciplina": "SCLILOG",
-        "professores": [
-          "Bianchi"
-        ],
-        "salas": [],
-        "grupoId": "aula-1793198132946-umu11s",
-        "indiceSegmento": 0,
-        "atribuicaoId": "atribuicao-1793197594335-44-njaacp"
       },
       "TII|1|1|3": {
         "disciplina": "SCLDSW2",
@@ -1026,6 +972,180 @@
         "grupoId": "aula-1793198343818-3sve2e",
         "indiceSegmento": 0,
         "atribuicaoId": "atribuicao-1793197594335-22-jadf7z"
+      },
+      "BES|0|0|2": {
+        "bloqueado": true
+      },
+      "BES|0|0|3": {
+        "bloqueado": true
+      },
+      "BES|0|1|2": {
+        "bloqueado": true
+      },
+      "BES|0|1|3": {
+        "bloqueado": true
+      },
+      "BES|0|2|2": {
+        "bloqueado": true
+      },
+      "BES|0|2|3": {
+        "bloqueado": true
+      },
+      "BES|0|3|2": {
+        "bloqueado": true
+      },
+      "BES|0|3|3": {
+        "bloqueado": true
+      },
+      "BES|0|4|2": {
+        "bloqueado": true
+      },
+      "BES|0|4|3": {
+        "bloqueado": true
+      },
+      "BES|1|0|2": {
+        "bloqueado": true
+      },
+      "BES|1|0|3": {
+        "bloqueado": true
+      },
+      "BES|1|1|3": {
+        "bloqueado": true
+      },
+      "BES|1|1|2": {
+        "bloqueado": true
+      },
+      "BES|1|2|2": {
+        "bloqueado": true
+      },
+      "BES|1|2|3": {
+        "bloqueado": true
+      },
+      "BES|1|3|3": {
+        "bloqueado": true
+      },
+      "BES|1|3|2": {
+        "bloqueado": true
+      },
+      "BES|1|4|2": {
+        "bloqueado": true
+      },
+      "BES|1|4|3": {
+        "bloqueado": true
+      },
+      "BES|2|0|2": {
+        "bloqueado": true
+      },
+      "BES|2|0|3": {
+        "bloqueado": true
+      },
+      "BES|2|1|3": {
+        "bloqueado": true
+      },
+      "BES|2|1|2": {
+        "bloqueado": true
+      },
+      "BES|2|2|2": {
+        "bloqueado": true
+      },
+      "BES|2|2|3": {
+        "bloqueado": true
+      },
+      "BES|2|3|3": {
+        "bloqueado": true
+      },
+      "BES|2|3|2": {
+        "bloqueado": true
+      },
+      "BES|2|4|2": {
+        "bloqueado": true
+      },
+      "BES|2|4|3": {
+        "bloqueado": true
+      },
+      "BES|3|0|0": {
+        "bloqueado": true
+      },
+      "BES|3|0|1": {
+        "bloqueado": true
+      },
+      "BES|3|1|1": {
+        "bloqueado": true
+      },
+      "BES|3|1|0": {
+        "bloqueado": true
+      },
+      "BES|3|2|0": {
+        "bloqueado": true
+      },
+      "BES|3|2|1": {
+        "bloqueado": true
+      },
+      "BES|3|3|1": {
+        "bloqueado": true
+      },
+      "BES|3|3|0": {
+        "bloqueado": true
+      },
+      "BES|3|4|0": {
+        "bloqueado": true
+      },
+      "BES|3|4|1": {
+        "bloqueado": true
+      },
+      "TII|0|3|1": {
+        "disciplina": "SCLALGP",
+        "professores": [
+          "João",
+          "Silvana"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793198093545-m8bzju",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793197594335-42-wuwa8t"
+      },
+      "TII|0|3|2": {
+        "disciplina": "SCLALGP",
+        "professores": [
+          "João",
+          "Silvana"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793198093545-m8bzju",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793197594335-42-wuwa8t"
+      },
+      "TII|0|0|1": {
+        "disciplina": "SCLDSW1",
+        "professores": [
+          "Jorge",
+          "Fábio"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793198095369-g6kqlu",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793197594335-43-pbgeug"
+      },
+      "TII|0|0|2": {
+        "disciplina": "SCLDSW1",
+        "professores": [
+          "Jorge",
+          "Fábio"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793198095369-g6kqlu",
+        "indiceSegmento": 1,
+        "atribuicaoId": "atribuicao-1793197594335-43-pbgeug"
+      },
+      "TII|0|1|0": {
+        "disciplina": "SCLILOG",
+        "professores": [
+          "Bianchi"
+        ],
+        "salas": [],
+        "grupoId": "aula-1793198132946-umu11s",
+        "indiceSegmento": 0,
+        "atribuicaoId": "atribuicao-1793197594335-44-njaacp"
       }
     },
     "atribuicoes": [
@@ -1038,7 +1158,8 @@
         "professores": [
           "Bianchi",
           "Eloize"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-1-9kqlyg",
@@ -1049,7 +1170,8 @@
         "professores": [
           "Bianchi",
           "Eloize"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-2-w3s3k5",
@@ -1059,7 +1181,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Aline"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-3-p2l7hu",
@@ -1069,7 +1192,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Eloize"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-4-q2nx9o",
@@ -1079,7 +1203,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Santinho"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-5-2c5qtd",
@@ -1090,7 +1215,8 @@
         "professores": [
           "Tiago",
           "Jorge"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-6-clxiwm",
@@ -1100,7 +1226,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Célia"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-7-a3bdro",
@@ -1110,7 +1237,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Ramos"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-8-txtu7u",
@@ -1120,7 +1248,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Lucas"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-9-1m8fvz",
@@ -1131,7 +1260,8 @@
         "professores": [
           "Mateus",
           "Silvana"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-10-u562yf",
@@ -1141,7 +1271,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Carlão"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-11-l5lsil",
@@ -1151,7 +1282,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Luiz"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-12-e1t2j7",
@@ -1161,7 +1293,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "João"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594334-13-l0l2l1",
@@ -1171,7 +1304,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "João"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-14-chv1cv",
@@ -1181,7 +1315,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Danilo"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-15-2oetj4",
@@ -1191,7 +1326,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Mateus"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-16-yat57f",
@@ -1202,7 +1338,8 @@
         "professores": [
           "Salina",
           "Sérgio"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-17-w6yfto",
@@ -1212,7 +1349,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Mateus"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-18-6thsrj",
@@ -1223,7 +1361,8 @@
         "professores": [
           "Eloize",
           "Silvana"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-19-2zud5n",
@@ -1234,7 +1373,8 @@
         "professores": [
           "Eloize",
           "Silvana"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-20-hi61zc",
@@ -1244,7 +1384,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Jorge"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-21-rtah25",
@@ -1255,7 +1396,8 @@
         "professores": [
           "Luiz",
           "Carlão"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-22-jadf7z",
@@ -1265,7 +1407,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Salina"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-23-gzcbnw",
@@ -1275,7 +1418,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Santinho"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-24-qwac1l",
@@ -1285,7 +1429,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Aline"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-25-jmlg8d",
@@ -1295,7 +1440,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Pablo"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-26-erghpa",
@@ -1306,7 +1452,8 @@
         "professores": [
           "Fábio",
           "Mateus"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-27-9s6fh2",
@@ -1316,7 +1463,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Lucas"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-28-5hx64h",
@@ -1326,7 +1474,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Célia"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-29-fdy0i7",
@@ -1336,7 +1485,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Carlão"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-30-f7fanz",
@@ -1346,7 +1496,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Célia"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-31-xt49tm",
@@ -1356,7 +1507,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Lucas"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-32-vpmkx0",
@@ -1366,7 +1518,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Tiago"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-33-klrayt",
@@ -1376,7 +1529,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Pedro"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-34-yzgz44",
@@ -1386,7 +1540,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Luiz"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-35-vk4nxo",
@@ -1396,7 +1551,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Ramos"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-36-cvys4c",
@@ -1406,7 +1562,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Célia"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-37-34m2k4",
@@ -1416,7 +1573,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Mateus"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-38-epn422",
@@ -1426,7 +1584,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Danilo"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-39-khztj7",
@@ -1436,7 +1595,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Carlão"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-40-pn2hcb",
@@ -1446,7 +1606,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Bianchi"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-41-tp1ww4",
@@ -1456,7 +1617,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Fábio"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-42-wuwa8t",
@@ -1467,7 +1629,8 @@
         "professores": [
           "João",
           "Silvana"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-43-pbgeug",
@@ -1478,7 +1641,8 @@
         "professores": [
           "Jorge",
           "Fábio"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-44-njaacp",
@@ -1488,7 +1652,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Bianchi"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-45-stva98",
@@ -1498,7 +1663,8 @@
         "aulasPorSemana": 1,
         "professores": [
           "Aline"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-46-e9r219",
@@ -1509,7 +1675,8 @@
         "professores": [
           "Danilo",
           "Tiago"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-47-iij5l4",
@@ -1519,7 +1686,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Bianchi"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-48-s16bnq",
@@ -1530,7 +1698,8 @@
         "professores": [
           "Salina",
           "Fábio"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-49-sb5go1",
@@ -1541,7 +1710,8 @@
         "professores": [
           "Pedro",
           "Luiz"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-50-h8inpg",
@@ -1552,7 +1722,8 @@
         "professores": [
           "Sérgio",
           "Salina"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-51-w5bo94",
@@ -1563,7 +1734,8 @@
         "professores": [
           "Ramos",
           "Sérgio"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-52-szp5tg",
@@ -1573,7 +1745,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "Célia"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-53-8mvktt",
@@ -1583,7 +1756,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Tiago"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-54-ck7sbn",
@@ -1593,7 +1767,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Pablo"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-55-385myc",
@@ -1603,7 +1778,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "Pablo"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-56-9qsh0w",
@@ -1613,7 +1789,8 @@
         "aulasPorSemana": 4,
         "professores": [
           "João"
-        ]
+        ],
+        "salas": []
       },
       {
         "id": "atribuicao-1793197594335-57-tcljaz",
@@ -1623,7 +1800,8 @@
         "aulasPorSemana": 2,
         "professores": [
           "João"
-        ]
+        ],
+        "salas": []
       }
     ]
   }

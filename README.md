@@ -7,6 +7,7 @@ Aplicação web para montar manualmente horários de cursos e turmas, atribuindo
 ## Funcionalidades
 
 - Exibe a grade semanal das turmas e dos períodos de cada curso.
+- Exibe uma visão de distribuição com professores e salas nas linhas e os dias da semana nas colunas; células destacadas mostram os dias alocados e a quantidade de aulas.
 - Permite cadastrar e remover professores e salas.
 - Permite inserir ou editar disciplinas, professores e salas em cada aula; clicar no nome de um professor destaca todas as células em que ele está atribuído ao longo da semana.
 - Oferece aulas com duração de um, dois ou quatro períodos consecutivos.
