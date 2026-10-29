@@ -8,6 +8,7 @@ Aplicação web para montar manualmente horários de cursos e turmas, atribuindo
 
 - Exibe a grade semanal das turmas e dos períodos de cada curso.
 - Exibe uma visão de distribuição com professores e salas nas linhas e os dias da semana nas colunas; células destacadas mostram os dias alocados e a quantidade de aulas.
+- Exibe as grades semanais Coringa 1 e Coringa 2, uma abaixo da outra na aba Horários.
 - Permite cadastrar e remover professores e salas.
 - Permite inserir ou editar disciplinas, professores e salas em cada aula; clicar no nome de um professor destaca todas as células em que ele está atribuído ao longo da semana.
 - Oferece aulas com duração de um, dois ou quatro períodos consecutivos.
@@ -39,7 +40,7 @@ A importação aceita o formato de backup exportado pela aplicação (`formato: 
 
 Exportar JSON cria um arquivo de backup que pode ser importado posteriormente. O `localStorage` é específico do navegador e da origem usada para acessar a aplicação; ele não substitui um backup e não sincroniza dados entre dispositivos.
 
-A importação de atribuição espera as colunas `Curso`, `Semestre`, `Sigla`, `Aulas por semana`, `Docente` e, opcionalmente, `Docente2`. Ela substitui a lista de atribuições importada anteriormente, sem alterar horários ou cadastros existentes, e acrescenta os docentes novos ao cadastro.
+A importação de atribuição espera as colunas `Curso`, `Semestre`, `Sigla`, `Aulas por semana` e `Docente`. As colunas `Docente2`, `Sala1` e `Sala2` são opcionais. As salas informadas são associadas às disciplinas e adicionadas ao cadastro quando ainda não existem. A importação substitui a lista de atribuições anterior sem alterar os horários existentes; docentes novos também são adicionados ao cadastro.
 
 ## Limitações do piloto
 

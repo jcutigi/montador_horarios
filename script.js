@@ -48,6 +48,9 @@ function extrairDados(conteudo) {
     id: item.id || `atribuicao-legada-${indice}`,
     salas: item.salas || []
   }));
+  const cursosNormalizados = dados.cursos.map(curso =>
+    curso.id === "CORINGA" ? {...curso, quantidade: 2} : curso
+  );
   const gruposAula = new Map();
   Object.entries(dados.aulas).forEach(([chave, aula]) => {
     if (!aula.grupoId) return;
@@ -71,6 +74,7 @@ function extrairDados(conteudo) {
   });
   return {
     ...dados,
+    cursos: cursosNormalizados,
     atribuicoes: atribuicoesNormalizadas
   };
 }
@@ -218,7 +222,6 @@ function obterAvisosDescanso() {
 }
 
 function renderizarGrade() {
-  renderizarDistribuicao();
   const container = document.getElementById("gradeGeral");
   const conflitos = obterConflitos();
   const avisosDescanso = obterAvisosDescanso();
@@ -232,6 +235,7 @@ function renderizarGrade() {
   
   if (!estado.cursos.length) {
     container.innerHTML = `<p class="nota">${escaparHtml(statusDados || "Nenhum curso carregado. Importe um arquivo JSON para começar.")}</p>`;
+    renderizarDistribuicao();
     return;
   }
 
@@ -408,6 +412,7 @@ function renderizarGrade() {
     resumo.className = "resumo";
     resumo.textContent = estado.cursos.length ? "Nenhum conflito de professor ou sala detectado." : "";
   }
+  renderizarDistribuicao();
 }
 
 function renderizarDistribuicao() {
@@ -646,7 +651,9 @@ function renderizarConfiguracao() {
   turmas.innerHTML = "";
   estado.cursos.forEach(curso => {
     const label = document.createElement("label");
-    label.innerHTML = `${escaparHtml(curso.nome)} <input type="number" min="1" max="10" value="${curso.quantidade}" data-qtd="${curso.id}"> turma(s)`;
+    label.innerHTML = curso.id === "CORINGA"
+      ? `${escaparHtml(curso.nome)} <input type="number" min="2" max="2" value="2" data-qtd="${curso.id}" disabled> turma(s)`
+      : `${escaparHtml(curso.nome)} <input type="number" min="1" max="10" value="${curso.quantidade}" data-qtd="${curso.id}"> turma(s)`;
     turmas.appendChild(label);
   });
 }
@@ -922,7 +929,7 @@ document.getElementById("aplicarConfigBtn").addEventListener("click", () => {
     
     const inputQtd = document.querySelector(`[data-qtd="${curso.id}"]`);
     if (inputQtd) {
-      curso.quantidade = Number(inputQtd.value);
+      curso.quantidade = curso.id === "CORINGA" ? 2 : Number(inputQtd.value);
     }
   }
   renderizarGrade(); 
@@ -1012,7 +1019,9 @@ function importarAtribuicoes(texto) {
     sigla: cabecalhos.indexOf("sigla"),
     aulasPorSemana: cabecalhos.indexOf("aulasporsemana"),
     docente: cabecalhos.indexOf("docente"),
-    docente2: cabecalhos.indexOf("docente2")
+    docente2: cabecalhos.indexOf("docente2"),
+    sala1: cabecalhos.indexOf("sala1"),
+    sala2: cabecalhos.indexOf("sala2")
   };
   const obrigatorios = ["curso", "semestre", "sigla", "aulasPorSemana", "docente"];
   const ausentes = obrigatorios.filter(campo => indices[campo] === -1);
@@ -1041,6 +1050,10 @@ function importarAtribuicoes(texto) {
     const professores = [linha[indices.docente], indices.docente2 === -1 ? "" : linha[indices.docente2]]
       .map(nome => (nome || "").trim())
       .filter(Boolean);
+    const salas = [indices.sala1, indices.sala2]
+      .filter(indice => indice !== -1)
+      .map(indice => (linha[indice] || "").trim())
+      .filter(Boolean);
 
     if (!cursoInformado || !curso) throw new Error(`Linha ${linhaCsv}: curso "${cursoInformado}" não encontrado.`);
     if (!Number.isInteger(semestre) || semestre < 1) throw new Error(`Linha ${linhaCsv}: semestre inválido.`);
@@ -1057,7 +1070,7 @@ function importarAtribuicoes(texto) {
       sigla,
       aulasPorSemana,
       professores,
-      salas: []
+      salas
     };
   });
   if (!novasAtribuicoes.length) throw new Error("O arquivo não contém linhas de atribuição.");
@@ -1067,6 +1080,11 @@ function importarAtribuicoes(texto) {
     if (!nomesProfessores.has(normalizarTexto(nome))) nomesProfessores.set(normalizarTexto(nome), nome);
   });
   estado.professores = [...nomesProfessores.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  const nomesSalas = new Map(estado.salas.map(nome => [normalizarTexto(nome), nome]));
+  novasAtribuicoes.flatMap(item => item.salas).forEach(nome => {
+    if (!nomesSalas.has(normalizarTexto(nome))) nomesSalas.set(normalizarTexto(nome), nome);
+  });
+  estado.salas = [...nomesSalas.values()].sort((a, b) => a.localeCompare(b, "pt-BR"));
   estado.atribuicoes = novasAtribuicoes;
 }
 
@@ -1116,7 +1134,15 @@ async function carregarDadosIniciais() {
   try {
     const dadosSalvos = localStorage.getItem(CHAVE_LOCAL_STORAGE);
     if (dadosSalvos !== null) {
-      estado = extrairDados(JSON.parse(dadosSalvos));
+      const conteudoSalvo = JSON.parse(dadosSalvos);
+      estado = extrairDados(conteudoSalvo);
+      const cursosSalvos = conteudoSalvo?.formato === "montador-horarios"
+        ? conteudoSalvo.dados.cursos
+        : conteudoSalvo.cursos;
+      const quantidadeCoringaSalva = cursosSalvos.find(curso => curso.id === "CORINGA")?.quantidade;
+      if (quantidadeCoringaSalva !== estado.cursos.find(curso => curso.id === "CORINGA")?.quantidade) {
+        salvarEstado();
+      }
       statusDados = "";
       renderizarTudo();
       return;
